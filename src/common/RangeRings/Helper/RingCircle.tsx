@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Tactical Situation Display (TSD)
  * Author: Fredli Fourqoni
  */
@@ -17,7 +17,6 @@ export interface RingCircleProps {
 }
 
 const RingCircleComponent: React.FC<RingCircleProps> = ({
-	index,
 	radiusPixels,
 	styleVariant,
 	isAzimuthRing,

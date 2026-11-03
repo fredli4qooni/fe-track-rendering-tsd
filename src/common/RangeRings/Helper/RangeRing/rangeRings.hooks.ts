@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Tactical Situation Display (TSD)
  * Author: Fredli Fourqoni
  */
@@ -10,7 +10,7 @@ import { generateRingData } from "./rangeRingCalculations";
 import type { RingData, UseRangeRingsResult } from "./rangeRings.types";
 
 export const useRingOffset = (
-	mapRef: React.MutableRefObject<any>,
+	mapRef: React.MutableRefObject<maptalks.Map | null>,
 	ownShipPosition: [number, number],
 	isFollowing: boolean,
 	isFreeDrag: boolean
@@ -75,7 +75,7 @@ export interface UseRangeRingsConfig {
 	mapPixelWidth: number;
 	mapPixelHeight: number;
 	ownShipPosition: [number, number];
-	mapRef: React.MutableRefObject<any>;
+	mapRef: React.MutableRefObject<maptalks.Map | null>;
 	isFollowing: boolean;
 	isFreeDrag: boolean;
 }
