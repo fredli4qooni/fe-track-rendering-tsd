@@ -33,11 +33,13 @@ export const useRingOffset = (
 
 		const updateOffset = () => {
 			try {
-				const mapCenter = mapRef.current.getCenter();
-				const ownShipPixel = mapRef.current.coordinateToContainerPoint(
+				const map = mapRef.current;
+				if (!map) return;
+				const mapCenter = map.getCenter();
+				const ownShipPixel = map.coordinateToContainerPoint(
 					new maptalks.Coordinate(ownShipPosition)
 				);
-				const centerPixel = mapRef.current.coordinateToContainerPoint(
+				const centerPixel = map.coordinateToContainerPoint(
 					new maptalks.Coordinate([mapCenter.x, mapCenter.y])
 				);
 
