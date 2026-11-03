@@ -33,13 +33,13 @@ export const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({
 				<div className="flex items-center gap-3 text-red-400 mb-3">
 					<AiOutlineExclamationCircle size={26} />
 					<h3 className="font-bold text-sm tracking-wide text-white">
-						Konfirmasi Hapus Entity
+						Confirm Entity Deletion
 					</h3>
 				</div>
 
 				<p className="text-xs text-neutral-2 mb-4 leading-relaxed">
-					Apakah Anda yakin ingin menghapus entity{" "}
-					<span className="font-bold text-white">#{track.id}</span> dari peta
+					Are you sure you want to delete entity{" "}
+					<span className="font-bold text-white">#{track.id}</span> from the
 					tactical display?
 				</p>
 
@@ -49,7 +49,7 @@ export const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({
 						onClick={onClose}
 						className="px-3.5 py-1.5 bg-neutral-4 hover:bg-neutral-3 text-white text-xs rounded transition-colors"
 					>
-						Batal
+						Cancel
 					</button>
 					<button
 						type="button"
@@ -59,7 +59,7 @@ export const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({
 						}}
 						className="px-4 py-1.5 bg-red-700 hover:bg-red-600 text-white text-xs font-medium rounded transition-colors shadow-lg"
 					>
-						Hapus Sekarang
+						Delete Entity
 					</button>
 				</div>
 			</div>

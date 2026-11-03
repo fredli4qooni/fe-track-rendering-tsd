@@ -105,7 +105,7 @@ describe("TacticalToolbar component", () => {
 		fireEvent.click(generateBtn);
 
 		expect(
-			screen.getByText(/Jumlah minimal spawn adalah 50 track/i)
+			screen.getByText(/Minimum spawn count is 50 tracks/i)
 		).toBeInTheDocument();
 	});
 
@@ -114,7 +114,7 @@ describe("TacticalToolbar component", () => {
 		render(<TacticalToolbar />);
 
 		expect(screen.getByText("Backend offline error")).toBeInTheDocument();
-		const closeBtn = screen.getByTitle("Tutup pesan peringatan ini");
+		const closeBtn = screen.getByTitle("Dismiss alert");
 		fireEvent.click(closeBtn);
 
 		expect(useTrackStore.getState().syncError).toBeNull();

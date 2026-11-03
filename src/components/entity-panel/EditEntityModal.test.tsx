@@ -67,11 +67,11 @@ describe("EditEntityModal component", () => {
 		const nameInput = screen.getByDisplayValue("KRI-FRIGATE-77");
 		fireEvent.change(nameInput, { target: { value: "" } });
 
-		const saveBtn = screen.getByRole("button", { name: "Simpan Perubahan" });
+		const saveBtn = screen.getByRole("button", { name: "Save Changes" });
 		fireEvent.click(saveBtn);
 
 		expect(
-			screen.getByText(/Nama entity tidak boleh kosong/i)
+			screen.getByText(/Entity name cannot be empty/i)
 		).toBeInTheDocument();
 		expect(onSave).not.toHaveBeenCalled();
 	});
@@ -91,7 +91,7 @@ describe("EditEntityModal component", () => {
 		const speedInput = screen.getByDisplayValue("18");
 		fireEvent.change(speedInput, { target: { value: "32.5" } });
 
-		const saveBtn = screen.getByRole("button", { name: "Simpan Perubahan" });
+		const saveBtn = screen.getByRole("button", { name: "Save Changes" });
 		fireEvent.click(saveBtn);
 
 		expect(onSave).toHaveBeenCalledWith(

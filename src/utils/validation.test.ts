@@ -22,22 +22,20 @@ describe("validation utils", () => {
 		it("rejects empty or whitespace-only names", () => {
 			expect(validateTrackName("").valid).toBe(false);
 			expect(validateTrackName("   ").valid).toBe(false);
-			expect(validateTrackName("").error).toBe(
-				"Nama entity tidak boleh kosong."
-			);
+			expect(validateTrackName("").error).toBe("Entity name cannot be empty.");
 		});
 
 		it("rejects names shorter than 2 characters", () => {
 			const res = validateTrackName("A");
 			expect(res.valid).toBe(false);
-			expect(res.error).toBe("Nama entity minimal 2 karakter.");
+			expect(res.error).toBe("Entity name must be at least 2 characters.");
 		});
 
 		it("rejects names longer than 60 characters", () => {
 			const longName = "A".repeat(61);
 			const res = validateTrackName(longName);
 			expect(res.valid).toBe(false);
-			expect(res.error).toBe("Nama entity maksimal 60 karakter.");
+			expect(res.error).toBe("Entity name cannot exceed 60 characters.");
 		});
 	});
 
@@ -52,7 +50,7 @@ describe("validation utils", () => {
 		it("rejects out-of-range latitudes", () => {
 			expect(validateLatitude(-90.01).valid).toBe(false);
 			expect(validateLatitude(90.01).valid).toBe(false);
-			expect(validateLatitude(120).error).toContain("-90° s/d +90°");
+			expect(validateLatitude(120).error).toContain("-90° and +90°");
 		});
 
 		it("rejects NaN or non-number inputs", () => {
@@ -72,7 +70,7 @@ describe("validation utils", () => {
 		it("rejects out-of-range longitudes", () => {
 			expect(validateLongitude(-180.1).valid).toBe(false);
 			expect(validateLongitude(180.1).valid).toBe(false);
-			expect(validateLongitude(200).error).toContain("-180° s/d +180°");
+			expect(validateLongitude(200).error).toContain("-180° and +180°");
 		});
 
 		it("rejects NaN or non-number inputs", () => {
@@ -91,7 +89,7 @@ describe("validation utils", () => {
 		it("rejects courses outside 0 to 360 range", () => {
 			expect(validateCourse(-1).valid).toBe(false);
 			expect(validateCourse(360.5).valid).toBe(false);
-			expect(validateCourse(400).error).toContain("0° s/d 360°");
+			expect(validateCourse(400).error).toContain("0° and 360°");
 		});
 
 		it("rejects NaN", () => {
@@ -109,7 +107,7 @@ describe("validation utils", () => {
 		it("rejects negative speeds or speeds over 120 knots", () => {
 			expect(validateSpeed(-0.5).valid).toBe(false);
 			expect(validateSpeed(121).valid).toBe(false);
-			expect(validateSpeed(150).error).toContain("0 s/d 120 knots");
+			expect(validateSpeed(150).error).toContain("0 and 120 knots");
 		});
 
 		it("rejects NaN", () => {
@@ -127,14 +125,14 @@ describe("validation utils", () => {
 		it("rejects counts below 50", () => {
 			const res = validateSpawnCount(49);
 			expect(res.valid).toBe(false);
-			expect(res.error).toBe("Jumlah minimal spawn adalah 50 track.");
+			expect(res.error).toBe("Minimum spawn count is 50 tracks.");
 		});
 
 		it("rejects counts above 10,000", () => {
 			const res = validateSpawnCount(10001);
 			expect(res.valid).toBe(false);
 			expect(res.error).toBe(
-				"Jumlah maksimal spawn adalah 10.000 track (batas akselerasi GPU)."
+				"Maximum spawn count is 10,000 tracks (GPU acceleration limit)."
 			);
 		});
 

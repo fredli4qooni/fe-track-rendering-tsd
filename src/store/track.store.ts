@@ -185,8 +185,8 @@ export const trackStore = createStore<TrackState>((set, get) => ({
 				rawMsg.toLowerCase().includes("abort");
 
 			const msg = isConnError
-				? "Koneksi backend terputus (Failed to fetch). Server Go di port :8080 belum menyala atau tidak dapat dijangkau. Jalankan: 'go run ./cmd/server/main.go' di folder be-explore-maptalks."
-				: `Gagal memuat entitas dari backend: ${rawMsg}`;
+				? "Backend service unreachable (Failed to fetch). Ensure Go backend is running at http://localhost:8080 (execute 'go run ./cmd/server/main.go' in be-explore-maptalks)."
+				: `Failed to load entities from backend: ${rawMsg}`;
 			set({ isSyncing: false, syncError: msg, isBackendOnline: false });
 		}
 	},
@@ -195,7 +195,7 @@ export const trackStore = createStore<TrackState>((set, get) => ({
 		const isOnline = get().isBackendOnline;
 		if (!isOnline) {
 			const msg =
-				"Backend Go offline. Tidak dapat membuat entitas baru tanpa database.";
+				"Backend service offline. Cannot create entities without database connection.";
 			set({ syncError: msg });
 			return null;
 		}
@@ -209,7 +209,7 @@ export const trackStore = createStore<TrackState>((set, get) => ({
 			const msg =
 				err instanceof Error
 					? err.message
-					: "Gagal menyimpan entitas ke backend";
+					: "Failed to persist entity to backend";
 			set({ syncError: msg });
 			return null;
 		}
@@ -226,7 +226,7 @@ export const trackStore = createStore<TrackState>((set, get) => ({
 				const msg =
 					err instanceof Error
 						? err.message
-						: "Gagal memperbarui entitas di backend";
+						: "Failed to update entity in backend";
 				set({ syncError: msg });
 			}
 		}
@@ -243,7 +243,7 @@ export const trackStore = createStore<TrackState>((set, get) => ({
 				const msg =
 					err instanceof Error
 						? err.message
-						: "Gagal menghapus entitas dari backend";
+						: "Failed to delete entity from backend";
 				set({ syncError: msg });
 			}
 		}

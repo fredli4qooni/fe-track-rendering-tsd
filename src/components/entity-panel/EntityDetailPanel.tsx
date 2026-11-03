@@ -112,7 +112,7 @@ export const EntityDetailPanel: React.FC = () => {
 						type="button"
 						onClick={() => selectTrack(undefined)}
 						className="w-6 h-6 flex items-center justify-center rounded-full hover:bg-neutral-4 text-neutral-3 hover:text-white transition-colors"
-						title="Tutup panel"
+						title="Close panel"
 					>
 						<AiOutlineClose size={14} />
 					</button>
@@ -122,7 +122,7 @@ export const EntityDetailPanel: React.FC = () => {
 					{/* Status & Classification */}
 					<div className="flex flex-col gap-1.5">
 						<span className="text-[10px] uppercase font-semibold text-neutral-3 tracking-wider">
-							Klasifikasi Taktis
+							Tactical Classification
 						</span>
 						<div className="flex items-center gap-2">
 							<select
@@ -150,7 +150,7 @@ export const EntityDetailPanel: React.FC = () => {
 					{/* Unit Name / Callsign Box */}
 					<div className="p-2.5 bg-black/40 border border-neutral-4/40 rounded-lg">
 						<span className="text-[10px] uppercase font-semibold text-neutral-3 block mb-1">
-							Identitas & Call Sign
+							Identity & Call Sign
 						</span>
 						<pre className="font-mono text-[11px] text-neutral-1 whitespace-pre-wrap leading-tight">
 							{track.name}
@@ -161,30 +161,30 @@ export const EntityDetailPanel: React.FC = () => {
 					<div className="flex flex-col gap-1.5 p-2.5 bg-black/40 border border-neutral-4/40 rounded-lg">
 						<div className="flex items-center justify-between">
 							<span className="text-[10px] uppercase font-semibold text-neutral-3">
-								Koordinat Geografis
+								Geographic Coordinates
 							</span>
 							<div className="flex items-center gap-1">
 								<button
 									type="button"
 									onClick={handleCopyCoords}
 									className="text-[10px] text-neutral-3 hover:text-cyan-400 flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-neutral-4/40"
-									title="Salin koordinat"
+									title="Copy coordinates"
 								>
 									{copied ? (
 										<AiOutlineCheck className="text-green-400" />
 									) : (
 										<AiOutlineCopy />
 									)}
-									<span>{copied ? "Tersalin" : "Salin"}</span>
+									<span>{copied ? "Copied" : "Copy"}</span>
 								</button>
 								<button
 									type="button"
 									onClick={handleCenterMap}
 									className="text-[10px] text-cyan-400 hover:text-cyan-300 flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-neutral-4/40"
-									title="Pusatkan peta ke track"
+									title="Center map on track"
 								>
 									<AiOutlineAim />
-									<span>Pusatkan</span>
+									<span>Center</span>
 								</button>
 							</div>
 						</div>
@@ -254,10 +254,10 @@ export const EntityDetailPanel: React.FC = () => {
 							type="button"
 							onClick={() => setIsDeleteOpen(true)}
 							className="flex items-center justify-center gap-1 px-3 py-1.5 bg-red-900/60 hover:bg-red-800 text-red-200 rounded transition-colors"
-							title="Hapus entity ini"
+							title="Delete this entity"
 						>
 							<AiOutlineDelete size={14} />
-							<span>Hapus</span>
+							<span>Delete</span>
 						</button>
 					</div>
 				</div>

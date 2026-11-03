@@ -44,11 +44,11 @@ describe("DeleteConfirmDialog component", () => {
 				onConfirm={jest.fn()}
 			/>
 		);
-		expect(screen.getByText("Konfirmasi Hapus Entity")).toBeInTheDocument();
+		expect(screen.getByText("Confirm Entity Deletion")).toBeInTheDocument();
 		expect(screen.getByText("#55")).toBeInTheDocument();
 	});
 
-	it("triggers onClose when clicking Batal button", () => {
+	it("triggers onClose when clicking Cancel button", () => {
 		const onClose = jest.fn();
 		render(
 			<DeleteConfirmDialog
@@ -58,11 +58,11 @@ describe("DeleteConfirmDialog component", () => {
 				onConfirm={jest.fn()}
 			/>
 		);
-		fireEvent.click(screen.getByRole("button", { name: "Batal" }));
+		fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});
 
-	it("triggers onConfirm and onClose when clicking Hapus Sekarang button", () => {
+	it("triggers onConfirm and onClose when clicking Delete Entity button", () => {
 		const onConfirm = jest.fn();
 		const onClose = jest.fn();
 		render(
@@ -73,7 +73,7 @@ describe("DeleteConfirmDialog component", () => {
 				onConfirm={onConfirm}
 			/>
 		);
-		fireEvent.click(screen.getByRole("button", { name: "Hapus Sekarang" }));
+		fireEvent.click(screen.getByRole("button", { name: "Delete Entity" }));
 		expect(onConfirm).toHaveBeenCalledTimes(1);
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});

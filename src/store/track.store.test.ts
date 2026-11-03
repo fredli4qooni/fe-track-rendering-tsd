@@ -114,7 +114,9 @@ describe("trackStore vanilla store", () => {
 
 			expect(created).toBeNull();
 			expect(trackStore.getState().tracks).toHaveLength(0);
-			expect(trackStore.getState().syncError).toContain("Backend Go offline");
+			expect(trackStore.getState().syncError).toContain(
+				"Backend service offline"
+			);
 		});
 
 		it("saveTrackUpdateToBackend calls API when online", async () => {

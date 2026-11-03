@@ -8,7 +8,8 @@ import {
 	AiOutlineDatabase,
 	AiOutlinePlus,
 	AiOutlineReload,
-	AiOutlineThunderbolt
+	AiOutlineThunderbolt,
+	AiOutlineWarning
 } from "react-icons/ai";
 import { RiRadarLine } from "react-icons/ri";
 
@@ -68,7 +69,7 @@ export const TacticalToolbar: React.FC = () => {
 		const valResult = validateSpawnCount(count);
 
 		if (!valResult.valid) {
-			setError(valResult.error ?? "Jumlah tidak valid");
+			setError(valResult.error ?? "Invalid quantity");
 			return;
 		}
 
@@ -111,7 +112,7 @@ export const TacticalToolbar: React.FC = () => {
 		if (tracks.length === 0) return;
 		if (
 			window.confirm(
-				`Bersihkan semua (${tracks.length.toLocaleString()}) entity dari peta?`
+				`Clear all (${tracks.length.toLocaleString()}) entities from the map?`
 			)
 		) {
 			setTracks([]);
@@ -172,7 +173,7 @@ export const TacticalToolbar: React.FC = () => {
 					onClick={handleLoadBackend}
 					disabled={isSyncing}
 					className="flex items-center gap-1 px-2.5 py-1 bg-neutral-4/60 hover:bg-neutral-4/90 disabled:opacity-50 text-neutral-1 font-medium rounded transition-colors"
-					title="Ambil dan sinkronisasikan entity resmi dari database backend Go (SQLite)"
+					title="Fetch and synchronize entities from Go backend database (SQLite)"
 				>
 					<AiOutlineDatabase
 						className={isSyncing ? "animate-spin" : ""}
@@ -190,8 +191,8 @@ export const TacticalToolbar: React.FC = () => {
 						className="flex items-center gap-1 px-2 py-1 bg-primary-20 hover:bg-primary-20/80 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded transition-colors"
 						title={
 							isBackendOnline
-								? "Tambah 1 entity baru di dekat kapal sendiri (tersimpan ke database SQLite)"
-								: "Backend Go Offline — Jalankan backend (go run ./cmd/server/main.go) untuk menambah entitas resmi"
+								? "Add 1 new tactical entity near own ship (persisted to SQLite database)"
+								: "Backend Offline — Start backend service (go run ./cmd/server/main.go) to add entities"
 						}
 					>
 						<AiOutlinePlus size={13} />
@@ -203,7 +204,7 @@ export const TacticalToolbar: React.FC = () => {
 						onClick={handleClearAll}
 						disabled={tracks.length === 0}
 						className="flex items-center gap-1 px-2 py-1 bg-red-900/60 hover:bg-red-800 disabled:opacity-30 text-red-200 rounded transition-colors"
-						title="Bersihkan semua entity dari tampilan peta"
+						title="Clear all entities from map view"
 					>
 						<AiOutlineClear size={13} />
 						<span>Clear</span>
@@ -220,10 +221,10 @@ export const TacticalToolbar: React.FC = () => {
 								? "bg-amber-600/90 border-amber-400 text-white shadow-md shadow-amber-950/60"
 								: "bg-amber-950/30 hover:bg-amber-900/50 border-amber-500/40 text-amber-300"
 						}`}
-						title="Buka panel benchmark rendering WebGL (GPU stress-test)"
+						title="Open WebGL GPU benchmark panel"
 					>
 						<AiOutlineThunderbolt size={13} className="text-amber-400" />
-						<span>⚡ Benchmark</span>
+						<span>Benchmark</span>
 					</button>
 				</div>
 			</div>
@@ -243,7 +244,7 @@ export const TacticalToolbar: React.FC = () => {
 							type="button"
 							onClick={() => setShowBenchmark(false)}
 							className="text-neutral-3 hover:text-white px-1.5 py-0.5 rounded text-xs hover:bg-neutral-4 transition-colors"
-							title="Tutup panel benchmark"
+							title="Close benchmark panel"
 						>
 							✕
 						</button>
@@ -252,27 +253,25 @@ export const TacticalToolbar: React.FC = () => {
 					{/* Infobox Explanation */}
 					<div className="p-2.5 bg-amber-950/30 border border-amber-500/30 rounded-lg text-amber-200/90 text-[11px] leading-relaxed">
 						<p className="font-semibold text-amber-300 mb-1">
-							ℹ Untuk apa fitur benchmark ini?
+							Purpose of WebGL Benchmark:
 						</p>
 						<p>
-							Fitur ini disediakan khusus untuk{" "}
-							<strong>
-								menguji kapasitas dan performa rendering WebGL2 GPU instancing
-							</strong>{" "}
-							pada browser Anda dengan memuat 50 hingga 10.000 kontak sekaligus.
+							This feature is designed specifically to test WebGL2 GPU
+							instancing rendering throughput on your hardware display with 50
+							to 10,000 tactical contacts.
 						</p>
 						<p className="mt-1.5 text-[10px] text-amber-400/90 bg-black/40 p-1.5 rounded border border-amber-500/20">
-							⚠ <strong>In-Memory Simulation Only:</strong> Seluruh entitas dari
-							benchmark ini <em>murni diproses di memori GPU lokal</em> dan{" "}
-							<strong>TIDAK disimpan ke database backend SQLite</strong> agar
-							tidak mengotori data operasional nyata.
+							<strong>Notice (In-Memory Simulation Only):</strong> All benchmark
+							entities are generated purely in local GPU memory and are NOT
+							persisted to the SQLite backend database, preserving operational
+							data integrity.
 						</p>
 					</div>
 
 					{/* Controls */}
 					<div className="flex items-center justify-between pt-1">
 						<div className="flex items-center gap-2">
-							<span className="text-neutral-3 text-[11px]">Beban Entitas:</span>
+							<span className="text-neutral-3 text-[11px]">Entity Load:</span>
 							{!isCustomMode ? (
 								<select
 									value={selectedPreset}
@@ -310,7 +309,7 @@ export const TacticalToolbar: React.FC = () => {
 										type="button"
 										onClick={() => setIsCustomMode(false)}
 										className="text-[11px] text-neutral-3 hover:text-white px-1"
-										title="Batal custom"
+										title="Cancel custom"
 									>
 										✕
 									</button>
@@ -323,13 +322,13 @@ export const TacticalToolbar: React.FC = () => {
 							onClick={handleSpawn}
 							disabled={isSpawning}
 							className="flex items-center gap-1.5 px-3 py-1 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white font-medium rounded transition-colors shadow-md text-xs"
-							title="Spawn tracks ke GPU untuk menguji performa WebGL"
+							title="Spawn tracks to GPU for WebGL performance testing"
 						>
 							<AiOutlineReload
 								className={isSpawning ? "animate-spin" : ""}
 								size={13}
 							/>
-							<span>{isSpawning ? "Rendering..." : "Generate ke GPU"}</span>
+							<span>{isSpawning ? "Rendering..." : "Generate to GPU"}</span>
 						</button>
 					</div>
 				</div>
@@ -340,11 +339,11 @@ export const TacticalToolbar: React.FC = () => {
 				<div className="w-[450px] p-3 bg-red-950/95 backdrop-blur-md border border-red-500/80 text-red-200 text-xs rounded-xl shadow-2xl flex flex-col gap-2 animate-in fade-in slide-in-from-top-1 duration-150">
 					<div className="flex items-start justify-between border-b border-red-800/60 pb-1.5">
 						<div className="flex items-center gap-2 text-red-300 font-semibold text-[12px]">
-							<span className="text-sm">⚠</span>
+							<AiOutlineWarning size={15} className="text-red-400" />
 							<span>
 								{syncError
-									? "Backend Go Belum Terkoneksi"
-									: "Validasi Input Gagal"}
+									? "Backend Service Disconnected"
+									: "Input Validation Failed"}
 							</span>
 						</div>
 						<button
@@ -354,7 +353,7 @@ export const TacticalToolbar: React.FC = () => {
 								clearSyncError();
 							}}
 							className="text-red-300 hover:text-white px-1.5 py-0.5 rounded text-xs hover:bg-red-900/60 transition-colors"
-							title="Tutup pesan peringatan ini"
+							title="Dismiss alert"
 						>
 							✕
 						</button>
@@ -366,27 +365,26 @@ export const TacticalToolbar: React.FC = () => {
 						{syncError && (
 							<div className="mt-2 p-2.5 bg-black/50 border border-red-500/30 rounded-lg text-[10px] text-neutral-2">
 								<div className="text-amber-300 font-semibold mb-1 flex items-center gap-1">
-									<span>💡</span>
-									<span>Langkah Penyelesaian:</span>
+									<span>Troubleshooting Guide:</span>
 								</div>
 								<ol className="list-decimal list-inside space-y-1 text-neutral-3 font-mono">
 									<li>
-										Buka terminal baru di direktori backend:
+										Open a new terminal in the backend directory:
 										<div className="text-cyan-300 pl-4 py-0.5 select-all font-sans">
 											cd
 											C:\Users\fredl\PROJECTS\leniot-intern\be-explore-maptalks
 										</div>
 									</li>
 									<li>
-										Jalankan server API:
+										Run the API server:
 										<div className="text-emerald-300 font-bold pl-4 py-0.5 select-all">
 											go run ./cmd/server/main.go
 										</div>
 									</li>
 									<li>
-										Setelah server aktif di port{" "}
-										<span className="text-white">:8080</span>, klik tombol{" "}
-										<strong>&quot;Coba Hubungkan Ulang&quot;</strong> di bawah.
+										After server is active on port{" "}
+										<span className="text-white">:8080</span>, click{" "}
+										<strong>&quot;Retry Connection&quot;</strong> below.
 									</li>
 								</ol>
 							</div>
@@ -411,9 +409,7 @@ export const TacticalToolbar: React.FC = () => {
 									className={isSyncing ? "animate-spin" : ""}
 									size={12}
 								/>
-								<span>
-									{isSyncing ? "Menghubungkan..." : "Coba Hubungkan Ulang"}
-								</span>
+								<span>{isSyncing ? "Connecting..." : "Retry Connection"}</span>
 							</button>
 						</div>
 					)}

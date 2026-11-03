@@ -69,26 +69,26 @@ describe("EntityDetailPanel component", () => {
 		useTrackStore.setState({ selectedTrack: 101 });
 		render(<EntityDetailPanel />);
 
-		const copyBtn = screen.getByTitle("Salin koordinat");
+		const copyBtn = screen.getByTitle("Copy coordinates");
 		fireEvent.click(copyBtn);
 
 		expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
 			"-2.65432, 118.12346"
 		);
-		expect(screen.getByText("Tersalin")).toBeInTheDocument();
+		expect(screen.getByText("Copied")).toBeInTheDocument();
 	});
 
 	it("deselects track when clicking close button", () => {
 		useTrackStore.setState({ selectedTrack: 101 });
 		render(<EntityDetailPanel />);
 
-		const closeBtn = screen.getByTitle("Tutup panel");
+		const closeBtn = screen.getByTitle("Close panel");
 		fireEvent.click(closeBtn);
 
 		expect(useTrackStore.getState().selectedTrack).toBeUndefined();
 	});
 
-	it("calls setCenter on map when clicking Pusatkan button", () => {
+	it("calls setCenter on map when clicking Center button", () => {
 		const mockSetCenter = jest.fn();
 		useMapStore.setState({
 			map: { setCenter: mockSetCenter } as unknown as import("maptalks").Map
@@ -96,7 +96,7 @@ describe("EntityDetailPanel component", () => {
 		useTrackStore.setState({ selectedTrack: 101 });
 
 		render(<EntityDetailPanel />);
-		const centerBtn = screen.getByTitle("Pusatkan peta ke track");
+		const centerBtn = screen.getByTitle("Center map on track");
 		fireEvent.click(centerBtn);
 
 		expect(mockSetCenter).toHaveBeenCalled();
@@ -106,15 +106,15 @@ describe("EntityDetailPanel component", () => {
 		useTrackStore.setState({ selectedTrack: 101 });
 		render(<EntityDetailPanel />);
 
-		const deleteBtn = screen.getByTitle("Hapus entity ini");
+		const deleteBtn = screen.getByTitle("Delete this entity");
 		fireEvent.click(deleteBtn);
 
 		// Modal should show
-		expect(screen.getByText("Konfirmasi Hapus Entity")).toBeInTheDocument();
+		expect(screen.getByText("Confirm Entity Deletion")).toBeInTheDocument();
 
 		// Click confirm button inside dialog
 		const confirmDeleteBtn = screen.getByRole("button", {
-			name: /Hapus Sekarang/i
+			name: /Delete Entity/i
 		});
 		fireEvent.click(confirmDeleteBtn);
 
