@@ -26,6 +26,7 @@ export interface TrackState {
 	removeTrack: (id: number) => void;
 	selectTrack: (id: number | undefined) => void;
 	setIsBackendOnline: (status: boolean) => void;
+	clearSyncError: () => void;
 	setTrackTargets: (
 		targets: {
 			id: number;
@@ -55,6 +56,10 @@ export const trackStore = createStore<TrackState>((set, get) => ({
 
 	setIsBackendOnline: (status: boolean) => {
 		set({ isBackendOnline: status });
+	},
+
+	clearSyncError: () => {
+		set({ syncError: null });
 	},
 
 	setTracks: (tracks: Track[]) => {
@@ -171,12 +176,17 @@ export const trackStore = createStore<TrackState>((set, get) => ({
 		try {
 			const entities = await fetchEntitiesFromBackend();
 			get().setTracks(entities);
-			set({ isBackendOnline: true, isSyncing: false });
+			set({ isBackendOnline: true, isSyncing: false, syncError: null });
 		} catch (err) {
-			const msg =
-				err instanceof Error
-					? err.message
-					: "Gagal memuat entitas dari backend";
+			const rawMsg = err instanceof Error ? err.message : String(err);
+			const isConnError =
+				rawMsg.toLowerCase().includes("failed to fetch") ||
+				rawMsg.toLowerCase().includes("networkerror") ||
+				rawMsg.toLowerCase().includes("abort");
+
+			const msg = isConnError
+				? "Koneksi backend terputus (Failed to fetch). Server Go di port :8080 belum menyala atau tidak dapat dijangkau. Jalankan: 'go run ./cmd/server/main.go' di folder be-explore-maptalks."
+				: `Gagal memuat entitas dari backend: ${rawMsg}`;
 			set({ isSyncing: false, syncError: msg, isBackendOnline: false });
 		}
 	},

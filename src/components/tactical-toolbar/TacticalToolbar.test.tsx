@@ -71,6 +71,9 @@ describe("TacticalToolbar component", () => {
 		jest.useFakeTimers();
 		render(<TacticalToolbar />);
 
+		const benchmarkBtn = screen.getByRole("button", { name: /benchmark/i });
+		fireEvent.click(benchmarkBtn);
+
 		const select = screen.getByRole("combobox");
 		fireEvent.change(select, { target: { value: "50" } });
 
@@ -89,6 +92,9 @@ describe("TacticalToolbar component", () => {
 	it("displays error message when custom count is invalid", () => {
 		render(<TacticalToolbar />);
 
+		const benchmarkBtn = screen.getByRole("button", { name: /benchmark/i });
+		fireEvent.click(benchmarkBtn);
+
 		const select = screen.getByRole("combobox");
 		fireEvent.change(select, { target: { value: "custom" } });
 
@@ -101,6 +107,17 @@ describe("TacticalToolbar component", () => {
 		expect(
 			screen.getByText(/Jumlah minimal spawn adalah 50 track/i)
 		).toBeInTheDocument();
+	});
+
+	it("dismisses error notification when clicking close button", () => {
+		useTrackStore.setState({ syncError: "Backend offline error" });
+		render(<TacticalToolbar />);
+
+		expect(screen.getByText("Backend offline error")).toBeInTheDocument();
+		const closeBtn = screen.getByTitle("Tutup pesan peringatan ini");
+		fireEvent.click(closeBtn);
+
+		expect(useTrackStore.getState().syncError).toBeNull();
 	});
 
 	it("clears all tracks when confirming clear all dialog", () => {

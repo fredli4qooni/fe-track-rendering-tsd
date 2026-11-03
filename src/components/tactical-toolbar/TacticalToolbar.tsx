@@ -35,6 +35,7 @@ export const TacticalToolbar: React.FC = () => {
 	const isBackendOnline = useTrackStore((state) => state.isBackendOnline);
 	const isSyncing = useTrackStore((state) => state.isSyncing);
 	const syncError = useTrackStore((state) => state.syncError);
+	const clearSyncError = useTrackStore((state) => state.clearSyncError);
 	const loadFromBackend = useTrackStore((state) => state.loadFromBackend);
 	const saveNewTrackToBackend = useTrackStore(
 		(state) => state.saveNewTrackToBackend
@@ -42,6 +43,7 @@ export const TacticalToolbar: React.FC = () => {
 	const syncHealthCheck = useTrackStore((state) => state.syncHealthCheck);
 	const ownShipPos = useOwnShipStore((state) => state.position);
 
+	const [showBenchmark, setShowBenchmark] = useState<boolean>(false);
 	const [selectedPreset, setSelectedPreset] = useState<number>(2000);
 	const [customCount, setCustomCount] = useState<string>("");
 	const [isCustomMode, setIsCustomMode] = useState<boolean>(false);
@@ -208,80 +210,213 @@ export const TacticalToolbar: React.FC = () => {
 					</button>
 				</div>
 
-				{/* WebGL Hardware Benchmark / Stress-Test Section (In-Memory GPU Simulation Only) */}
-				<div
-					className="flex items-center gap-1.5 pl-2.5 ml-1 border-l-2 border-amber-500/40 bg-amber-950/20 px-2 py-0.5 rounded border border-amber-500/20"
-					title="Mode Benchmark Hardware WebGL: Uji beban rendering ribuan entitas di GPU lokal (in-memory simulation, tidak disimpan ke database)"
-				>
-					<div className="flex items-center gap-1 text-amber-300 font-semibold text-[11px] whitespace-nowrap">
-						<AiOutlineThunderbolt size={13} className="text-amber-400" />
-						<span>⚡ Benchmark:</span>
-					</div>
-
-					{!isCustomMode ? (
-						<select
-							value={selectedPreset}
-							onChange={(e) => {
-								if (e.target.value === "custom") {
-									setIsCustomMode(true);
-								} else {
-									setSelectedPreset(Number(e.target.value));
-								}
-							}}
-							className="bg-black/60 border border-neutral-4 text-white text-xs px-2 py-1 rounded focus:outline-none focus:border-amber-400 cursor-pointer"
-						>
-							{SPAWN_PRESETS.map((cnt) => (
-								<option key={cnt} value={cnt}>
-									{cnt.toLocaleString()} tracks
-								</option>
-							))}
-							<option value="custom">Custom...</option>
-						</select>
-					) : (
-						<div className="flex items-center gap-1">
-							<input
-								type="number"
-								placeholder="50 - 10000"
-								value={customCount}
-								onChange={(e) => {
-									setCustomCount(e.target.value);
-									setError(null);
-								}}
-								className="w-24 bg-black/60 border border-neutral-4 text-white text-xs px-2 py-1 rounded focus:outline-none focus:border-amber-400"
-								min={50}
-								max={10000}
-							/>
-							<button
-								type="button"
-								onClick={() => setIsCustomMode(false)}
-								className="text-[11px] text-neutral-3 hover:text-white px-1"
-								title="Batal custom"
-							>
-								✕
-							</button>
-						</div>
-					)}
-
+				{/* Toggle WebGL Benchmark Button */}
+				<div className="flex items-center pl-2 ml-1 border-l border-neutral-4/70">
 					<button
 						type="button"
-						onClick={handleSpawn}
-						disabled={isSpawning}
-						className="flex items-center gap-1 px-2.5 py-1 bg-amber-700/80 hover:bg-amber-600 disabled:opacity-50 text-white font-medium rounded transition-colors shadow-sm"
-						title="Spawn tracks secara lokal untuk benchmark rendering WebGL di GPU"
+						onClick={() => setShowBenchmark((prev) => !prev)}
+						className={`flex items-center gap-1.5 px-2.5 py-1 rounded transition-all text-[11px] font-medium border ${
+							showBenchmark
+								? "bg-amber-600/90 border-amber-400 text-white shadow-md shadow-amber-950/60"
+								: "bg-amber-950/30 hover:bg-amber-900/50 border-amber-500/40 text-amber-300"
+						}`}
+						title="Buka panel benchmark rendering WebGL (GPU stress-test)"
 					>
-						<AiOutlineReload
-							className={isSpawning ? "animate-spin" : ""}
-							size={13}
-						/>
-						<span>{isSpawning ? "Spawning..." : "Generate"}</span>
+						<AiOutlineThunderbolt size={13} className="text-amber-400" />
+						<span>⚡ Benchmark</span>
 					</button>
 				</div>
 			</div>
 
-			{/* Inline Error Toast if any */}
+			{/* WebGL Benchmark Infobox & Controls Panel */}
+			{showBenchmark && (
+				<div className="w-[450px] p-3.5 bg-neutral-5/95 backdrop-blur-md border border-amber-500/50 rounded-xl shadow-2xl text-white text-xs flex flex-col gap-2.5 animate-in fade-in slide-in-from-top-2 duration-150">
+					{/* Header */}
+					<div className="flex items-center justify-between pb-2 border-b border-neutral-4/70">
+						<div className="flex items-center gap-2">
+							<AiOutlineThunderbolt className="text-amber-400" size={16} />
+							<span className="font-bold text-amber-300 text-[12px] tracking-wide">
+								WebGL Hardware Benchmark (GPU Stress-Test)
+							</span>
+						</div>
+						<button
+							type="button"
+							onClick={() => setShowBenchmark(false)}
+							className="text-neutral-3 hover:text-white px-1.5 py-0.5 rounded text-xs hover:bg-neutral-4 transition-colors"
+							title="Tutup panel benchmark"
+						>
+							✕
+						</button>
+					</div>
+
+					{/* Infobox Explanation */}
+					<div className="p-2.5 bg-amber-950/30 border border-amber-500/30 rounded-lg text-amber-200/90 text-[11px] leading-relaxed">
+						<p className="font-semibold text-amber-300 mb-1">
+							ℹ Untuk apa fitur benchmark ini?
+						</p>
+						<p>
+							Fitur ini disediakan khusus untuk{" "}
+							<strong>
+								menguji kapasitas dan performa rendering WebGL2 GPU instancing
+							</strong>{" "}
+							pada browser Anda dengan memuat 50 hingga 10.000 kontak sekaligus.
+						</p>
+						<p className="mt-1.5 text-[10px] text-amber-400/90 bg-black/40 p-1.5 rounded border border-amber-500/20">
+							⚠ <strong>In-Memory Simulation Only:</strong> Seluruh entitas dari
+							benchmark ini <em>murni diproses di memori GPU lokal</em> dan{" "}
+							<strong>TIDAK disimpan ke database backend SQLite</strong> agar
+							tidak mengotori data operasional nyata.
+						</p>
+					</div>
+
+					{/* Controls */}
+					<div className="flex items-center justify-between pt-1">
+						<div className="flex items-center gap-2">
+							<span className="text-neutral-3 text-[11px]">Beban Entitas:</span>
+							{!isCustomMode ? (
+								<select
+									value={selectedPreset}
+									onChange={(e) => {
+										if (e.target.value === "custom") {
+											setIsCustomMode(true);
+										} else {
+											setSelectedPreset(Number(e.target.value));
+										}
+									}}
+									className="bg-black/60 border border-neutral-4 text-white text-xs px-2.5 py-1 rounded focus:outline-none focus:border-amber-400 cursor-pointer"
+								>
+									{SPAWN_PRESETS.map((cnt) => (
+										<option key={cnt} value={cnt}>
+											{cnt.toLocaleString()} tracks
+										</option>
+									))}
+									<option value="custom">Custom...</option>
+								</select>
+							) : (
+								<div className="flex items-center gap-1">
+									<input
+										type="number"
+										placeholder="50 - 10000"
+										value={customCount}
+										onChange={(e) => {
+											setCustomCount(e.target.value);
+											setError(null);
+										}}
+										className="w-24 bg-black/60 border border-neutral-4 text-white text-xs px-2 py-1 rounded focus:outline-none focus:border-amber-400"
+										min={50}
+										max={10000}
+									/>
+									<button
+										type="button"
+										onClick={() => setIsCustomMode(false)}
+										className="text-[11px] text-neutral-3 hover:text-white px-1"
+										title="Batal custom"
+									>
+										✕
+									</button>
+								</div>
+							)}
+						</div>
+
+						<button
+							type="button"
+							onClick={handleSpawn}
+							disabled={isSpawning}
+							className="flex items-center gap-1.5 px-3 py-1 bg-amber-600 hover:bg-amber-500 disabled:opacity-50 text-white font-medium rounded transition-colors shadow-md text-xs"
+							title="Spawn tracks ke GPU untuk menguji performa WebGL"
+						>
+							<AiOutlineReload
+								className={isSpawning ? "animate-spin" : ""}
+								size={13}
+							/>
+							<span>{isSpawning ? "Rendering..." : "Generate ke GPU"}</span>
+						</button>
+					</div>
+				</div>
+			)}
+
+			{/* Detailed Error / Status Notification Banner */}
 			{(error || syncError) && (
-				<div className="px-3 py-1.5 bg-red-950/90 border border-red-500/80 text-red-200 text-xs rounded shadow-lg animate-pulse">
-					⚠ {error || syncError}
+				<div className="w-[450px] p-3 bg-red-950/95 backdrop-blur-md border border-red-500/80 text-red-200 text-xs rounded-xl shadow-2xl flex flex-col gap-2 animate-in fade-in slide-in-from-top-1 duration-150">
+					<div className="flex items-start justify-between border-b border-red-800/60 pb-1.5">
+						<div className="flex items-center gap-2 text-red-300 font-semibold text-[12px]">
+							<span className="text-sm">⚠</span>
+							<span>
+								{syncError
+									? "Backend Go Belum Terkoneksi"
+									: "Validasi Input Gagal"}
+							</span>
+						</div>
+						<button
+							type="button"
+							onClick={() => {
+								setError(null);
+								clearSyncError();
+							}}
+							className="text-red-300 hover:text-white px-1.5 py-0.5 rounded text-xs hover:bg-red-900/60 transition-colors"
+							title="Tutup pesan peringatan ini"
+						>
+							✕
+						</button>
+					</div>
+
+					<div className="text-[11px] text-red-200 leading-relaxed">
+						<p>{error || syncError}</p>
+
+						{syncError && (
+							<div className="mt-2 p-2.5 bg-black/50 border border-red-500/30 rounded-lg text-[10px] text-neutral-2">
+								<div className="text-amber-300 font-semibold mb-1 flex items-center gap-1">
+									<span>💡</span>
+									<span>Langkah Penyelesaian:</span>
+								</div>
+								<ol className="list-decimal list-inside space-y-1 text-neutral-3 font-mono">
+									<li>
+										Buka terminal baru di direktori backend:
+										<div className="text-cyan-300 pl-4 py-0.5 select-all font-sans">
+											cd
+											C:\Users\fredl\PROJECTS\leniot-intern\be-explore-maptalks
+										</div>
+									</li>
+									<li>
+										Jalankan server API:
+										<div className="text-emerald-300 font-bold pl-4 py-0.5 select-all">
+											go run ./cmd/server/main.go
+										</div>
+									</li>
+									<li>
+										Setelah server aktif di port{" "}
+										<span className="text-white">:8080</span>, klik tombol{" "}
+										<strong>&quot;Coba Hubungkan Ulang&quot;</strong> di bawah.
+									</li>
+								</ol>
+							</div>
+						)}
+					</div>
+
+					{syncError && (
+						<div className="flex justify-end pt-1">
+							<button
+								type="button"
+								onClick={() => {
+									void syncHealthCheck().then((online) => {
+										if (online) {
+											void loadFromBackend();
+										}
+									});
+								}}
+								disabled={isSyncing}
+								className="px-3 py-1 bg-red-800 hover:bg-red-700 disabled:opacity-50 text-white rounded text-[11px] transition-colors flex items-center gap-1.5 font-medium shadow-sm"
+							>
+								<AiOutlineReload
+									className={isSyncing ? "animate-spin" : ""}
+									size={12}
+								/>
+								<span>
+									{isSyncing ? "Menghubungkan..." : "Coba Hubungkan Ulang"}
+								</span>
+							</button>
+						</div>
+					)}
 				</div>
 			)}
 		</div>

@@ -75,7 +75,7 @@ describe("trackStore vanilla store", () => {
 
 			await trackStore.getState().loadFromBackend();
 			expect(trackStore.getState().isBackendOnline).toBe(false);
-			expect(trackStore.getState().syncError).toBe("Network Error");
+			expect(trackStore.getState().syncError).toContain("Network Error");
 		});
 
 		it("saveNewTrackToBackend uses API when online", async () => {
