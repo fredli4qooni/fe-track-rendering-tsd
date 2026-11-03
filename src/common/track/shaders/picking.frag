@@ -1,4 +1,4 @@
-﻿#version 300 es
+#version 300 es
 /**
  * Tactical Situation Display (TSD)
  * Author: Fredli Fourqoni

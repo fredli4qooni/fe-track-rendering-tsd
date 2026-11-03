@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Tactical Situation Display (TSD)
  * Author: Fredli Fourqoni
  */
