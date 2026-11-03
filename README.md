@@ -59,6 +59,18 @@ Mengacu pada ketentuan arsitektur [AGENTS.md](AGENTS.md), berikut alasan pemilih
 
 - Menjamin _type safety_ pada level kontrak data koordinat, entitas taktis, dan komunikasi antar worker guna mencegah runtime error (`null`/`undefined`).
 
+### 6. Arsitektur API: REST API & Kesiapan Kontrak gRPC
+
+- **Evaluasi Mandiri Tanpa Hambatan (Zero-Friction Review)**: Mengacu pada kebebasan perancangan API pada [`.task/task.md`](.task/task.md), backend Go pendamping (`be-explore-maptalks`) menyediakan RESTful API berbasis Go standard library `net/http` dan SQLite murni. Pendekatan ini memungkinkan tim reviewer menjalankan pengujian secara instan (`go run ./cmd/server/main.go`) tanpa perlu menyiapkan Docker container Apache APISIX Gateway atau etcd terlebih dahulu.
+- **Kesiapan Produksi Enterprise (gRPC / APISIX Parity)**: Schema entitas dan validasi boundary dirancang 1:1 kompatibel dengan standar `AGENTS.md`. Kontrak Protocol Buffers lengkap disertakan pada repository backend (`proto/entity.proto`) untuk kesiapan migrasi ke gRPC server streaming saat diterapkan pada infrastruktur APISIX gateway.
+
+---
+
+## 🔗 Repository Backend Go Pendamping
+
+Layanan backend pendukung untuk pengelolaan dan persistensi data entity taktis (CRUD, validasi, dan auto-seeding kontak laut) tersedia di:  
+👉 **`be-explore-maptalks/`** (atau repositori backend Go terkait).
+
 ---
 
 ## 🚀 Installation & Setup (Panduan Menjalankan Program)
