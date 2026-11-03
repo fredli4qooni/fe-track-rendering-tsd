@@ -38,7 +38,7 @@ export interface TrackState {
 	// Backend API Synchronization Methods
 	syncHealthCheck: () => Promise<boolean>;
 	loadFromBackend: () => Promise<void>;
-	saveNewTrackToBackend: (track: Omit<Track, "id">) => Promise<Track>;
+	saveNewTrackToBackend: (track: Omit<Track, "id">) => Promise<Track | null>;
 	saveTrackUpdateToBackend: (
 		id: number,
 		patch: Partial<Track>
@@ -183,30 +183,26 @@ export const trackStore = createStore<TrackState>((set, get) => ({
 
 	saveNewTrackToBackend: async (trackData: Omit<Track, "id">) => {
 		const isOnline = get().isBackendOnline;
-		if (isOnline) {
-			try {
-				const created = await createEntityInBackend(trackData);
-				get().addOrUpdateTrack(created);
-				return created;
-			} catch (err) {
-				const msg =
-					err instanceof Error
-						? err.message
-						: "Gagal menyimpan entitas ke backend";
-				set({ syncError: msg });
-			}
+		if (!isOnline) {
+			const msg =
+				"Backend Go offline. Tidak dapat membuat entitas baru tanpa database.";
+			set({ syncError: msg });
+			return null;
 		}
 
-		// Fallback for standalone offline simulation
-		const tracks = get().tracks;
-		const nextId =
-			tracks.length > 0 ? Math.max(...tracks.map((t) => t.id)) + 1 : 1;
-		const fallbackTrack: Track = {
-			...trackData,
-			id: nextId
-		};
-		get().addOrUpdateTrack(fallbackTrack);
-		return fallbackTrack;
+		try {
+			const created = await createEntityInBackend(trackData);
+			get().addOrUpdateTrack(created);
+			set({ syncError: null });
+			return created;
+		} catch (err) {
+			const msg =
+				err instanceof Error
+					? err.message
+					: "Gagal menyimpan entitas ke backend";
+			set({ syncError: msg });
+			return null;
+		}
 	},
 
 	saveTrackUpdateToBackend: async (id: number, patch: Partial<Track>) => {
@@ -215,6 +211,7 @@ export const trackStore = createStore<TrackState>((set, get) => ({
 		if (isOnline) {
 			try {
 				await updateEntityInBackend(id, patch);
+				set({ syncError: null });
 			} catch (err) {
 				const msg =
 					err instanceof Error
@@ -231,6 +228,7 @@ export const trackStore = createStore<TrackState>((set, get) => ({
 		if (isOnline) {
 			try {
 				await deleteEntityInBackend(id);
+				set({ syncError: null });
 			} catch (err) {
 				const msg =
 					err instanceof Error

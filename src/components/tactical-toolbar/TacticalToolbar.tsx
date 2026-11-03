@@ -184,8 +184,13 @@ export const TacticalToolbar: React.FC = () => {
 					<button
 						type="button"
 						onClick={handleQuickAdd}
-						className="flex items-center gap-1 px-2 py-1 bg-primary-20 hover:bg-primary-20/80 text-white rounded transition-colors"
-						title="Tambah 1 entity baru di dekat kapal sendiri (tersimpan ke database)"
+						disabled={!isBackendOnline || isSyncing}
+						className="flex items-center gap-1 px-2 py-1 bg-primary-20 hover:bg-primary-20/80 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded transition-colors"
+						title={
+							isBackendOnline
+								? "Tambah 1 entity baru di dekat kapal sendiri (tersimpan ke database SQLite)"
+								: "Backend Go Offline — Jalankan backend (go run ./cmd/server/main.go) untuk menambah entitas resmi"
+						}
 					>
 						<AiOutlinePlus size={13} />
 						<span>+1 Track</span>

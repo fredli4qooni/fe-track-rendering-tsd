@@ -95,11 +95,11 @@ describe("trackStore vanilla store", () => {
 				status: "ACTIVE"
 			});
 
-			expect(created.id).toBe(99);
+			expect(created?.id).toBe(99);
 			expect(trackStore.getState().tracks).toHaveLength(1);
 		});
 
-		it("saveNewTrackToBackend falls back to local ID when offline", async () => {
+		it("saveNewTrackToBackend rejects and sets syncError when offline", async () => {
 			trackStore.setState({ isBackendOnline: false, tracks: [] });
 
 			const created = await trackStore.getState().saveNewTrackToBackend({
@@ -112,8 +112,9 @@ describe("trackStore vanilla store", () => {
 				status: "ACTIVE"
 			});
 
-			expect(created.id).toBe(1);
-			expect(trackStore.getState().tracks[0].name).toBe("Offline Vessel");
+			expect(created).toBeNull();
+			expect(trackStore.getState().tracks).toHaveLength(0);
+			expect(trackStore.getState().syncError).toContain("Backend Go offline");
 		});
 
 		it("saveTrackUpdateToBackend calls API when online", async () => {

@@ -39,16 +39,32 @@ describe("TacticalToolbar component", () => {
 		expect(screen.getByText("0")).toBeInTheDocument();
 	});
 
-	it("adds a single track when clicking '+1 Track' button", () => {
-		render(<TacticalToolbar />);
-		const addBtn = screen.getByText("+1 Track");
+	it("adds a single track when clicking '+1 Track' button and backend is online", () => {
+		useTrackStore.setState({ isBackendOnline: true });
+		jest
+			.spyOn(useTrackStore.getState(), "saveNewTrackToBackend")
+			.mockImplementation(async () => {
+				useTrackStore.setState({ tracks: [mockTrack] });
+				return mockTrack;
+			});
 
-		fireEvent.click(addBtn);
+		render(<TacticalToolbar />);
+		const addBtn = screen.getByText("+1 Track").closest("button");
+		expect(addBtn).not.toBeDisabled();
+
+		if (addBtn) fireEvent.click(addBtn);
 
 		const tracks = useTrackStore.getState().tracks;
 		expect(tracks).toHaveLength(1);
 		expect(tracks[0].id).toBe(1);
 		expect(screen.getByText("1")).toBeInTheDocument();
+	});
+
+	it("disables '+1 Track' button when backend is offline", () => {
+		useTrackStore.setState({ isBackendOnline: false });
+		render(<TacticalToolbar />);
+		const addBtn = screen.getByText("+1 Track").closest("button");
+		expect(addBtn).toBeDisabled();
 	});
 
 	it("spawns batch tracks when clicking Generate button", () => {
