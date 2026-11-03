@@ -102,8 +102,7 @@ export const useTrackMover = () => {
 		 */
 		const onMessage = (ev: MessageEvent) => {
 			const data = ev.data as
-				| { type?: string; tracks?: TrackUpdate[] }
-				| undefined;
+				{ type?: string; tracks?: TrackUpdate[] } | undefined;
 			if (data?.type !== "moved" || !Array.isArray(data.tracks)) return;
 			const moved = data.tracks;
 

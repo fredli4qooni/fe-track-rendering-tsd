@@ -14,37 +14,37 @@ Instructions for AI coding agents (and humans) working in this front-end codebas
 
 ## 2. Tech stack
 
-| Concern | Choice | Notes |
-| --- | --- | --- |
-| Language | TypeScript, **strict mode** | Never loosen strictness to make code compile. |
-| UI framework | React 18+ | Concurrent rendering; works well with Module Federation. |
-| Bundler | Rspack | Webpack-compatible, faster builds, first-class Module Federation support. |
-| Micro-frontends | Webpack Module Federation (via Rspack) | Independent deploys, composed at runtime. |
-| State | Zustand | Stores can be vanilla JS or bound to React. No Redux. |
-| Styling | TailwindCSS | CSS Modules are allowed only for local overrides. |
-| API | gRPC-Web via APISIX | Typed contracts from `.proto` files. Do not add new REST endpoints. |
-| Realtime | gRPC server streaming via APISIX, plus WebSocket | WebSocket is for lightweight events (notifications, presence) or where gRPC-Web is not fully supported. |
-| Testing | Jest + React Testing Library | Jest for unit tests, RTL for component integration tests. |
-| Lint / format | ESLint (flat config) + Prettier | Prettier issues surface as ESLint warnings. |
-| Docs | TSDoc comments, rendered by TypeDoc | Docs live in the code; no separate wiki. |
+| Concern         | Choice                                           | Notes                                                                                                   |
+| --------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| Language        | TypeScript, **strict mode**                      | Never loosen strictness to make code compile.                                                           |
+| UI framework    | React 18+                                        | Concurrent rendering; works well with Module Federation.                                                |
+| Bundler         | Rspack                                           | Webpack-compatible, faster builds, first-class Module Federation support.                               |
+| Micro-frontends | Webpack Module Federation (via Rspack)           | Independent deploys, composed at runtime.                                                               |
+| State           | Zustand                                          | Stores can be vanilla JS or bound to React. No Redux.                                                   |
+| Styling         | TailwindCSS                                      | CSS Modules are allowed only for local overrides.                                                       |
+| API             | gRPC-Web via APISIX                              | Typed contracts from `.proto` files. Do not add new REST endpoints.                                     |
+| Realtime        | gRPC server streaming via APISIX, plus WebSocket | WebSocket is for lightweight events (notifications, presence) or where gRPC-Web is not fully supported. |
+| Testing         | Jest + React Testing Library                     | Jest for unit tests, RTL for component integration tests.                                               |
+| Lint / format   | ESLint (flat config) + Prettier                  | Prettier issues surface as ESLint warnings.                                                             |
+| Docs            | TSDoc comments, rendered by TypeDoc              | Docs live in the code; no separate wiki.                                                                |
 
 ## 3. Naming conventions
 
-| Item | Convention | Example |
-| --- | --- | --- |
-| Folder | kebab-case | `sidebar-maps/` |
-| Default file | camelCase | `formatDate.ts` |
-| Component / class file | PascalCase | `SidebarMaps.tsx` |
-| Component types | `PascalCase.types.ts` | `SidebarMaps.types.ts` |
-| Component constants | `PascalCase.constants.ts` | `SidebarMaps.constants.ts` |
-| Component utils | `PascalCase.utils.ts` | `SidebarMaps.utils.ts` |
-| Component hooks | `useCamelCase.ts` | `useSideBar.ts` |
-| Global types | `camelCase.types.ts` | `track.types.ts` |
-| Global constants | `camelCase.constants.ts` | `mapConfig.constants.ts` |
-| Store (vanilla) | `domain.store.ts` | `track.store.ts` |
-| Store (React adapter) | `useDomainStore.ts` | `useTrackStore.ts` |
-| Event bus (optional) | `domain.bus.ts` | `track.bus.ts` |
-| Tests | `*.test.ts` / `*.test.tsx` | `SidebarMaps.test.tsx` |
+| Item                   | Convention                 | Example                    |
+| ---------------------- | -------------------------- | -------------------------- |
+| Folder                 | kebab-case                 | `sidebar-maps/`            |
+| Default file           | camelCase                  | `formatDate.ts`            |
+| Component / class file | PascalCase                 | `SidebarMaps.tsx`          |
+| Component types        | `PascalCase.types.ts`      | `SidebarMaps.types.ts`     |
+| Component constants    | `PascalCase.constants.ts`  | `SidebarMaps.constants.ts` |
+| Component utils        | `PascalCase.utils.ts`      | `SidebarMaps.utils.ts`     |
+| Component hooks        | `useCamelCase.ts`          | `useSideBar.ts`            |
+| Global types           | `camelCase.types.ts`       | `track.types.ts`           |
+| Global constants       | `camelCase.constants.ts`   | `mapConfig.constants.ts`   |
+| Store (vanilla)        | `domain.store.ts`          | `track.store.ts`           |
+| Store (React adapter)  | `useDomainStore.ts`        | `useTrackStore.ts`         |
+| Event bus (optional)   | `domain.bus.ts`            | `track.bus.ts`             |
+| Tests                  | `*.test.ts` / `*.test.tsx` | `SidebarMaps.test.tsx`     |
 
 Inside files:
 

@@ -3,9 +3,9 @@
  * Author: Fredli Fourqoni
  */
 import {
-	generateTacticalName,
 	generateBatchTracks,
-	generateSingleTrack
+	generateSingleTrack,
+	generateTacticalName
 } from "./trackGenerator";
 
 describe("trackGenerator utils", () => {
@@ -77,4 +77,3 @@ describe("trackGenerator utils", () => {
 		});
 	});
 });
-

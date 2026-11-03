@@ -3,12 +3,12 @@
  * Author: Fredli Fourqoni
  */
 import {
-	validateTrackName,
+	validateCourse,
 	validateLatitude,
 	validateLongitude,
-	validateCourse,
+	validateSpawnCount,
 	validateSpeed,
-	validateSpawnCount
+	validateTrackName
 } from "./validation";
 
 describe("validation utils", () => {
@@ -22,7 +22,9 @@ describe("validation utils", () => {
 		it("rejects empty or whitespace-only names", () => {
 			expect(validateTrackName("").valid).toBe(false);
 			expect(validateTrackName("   ").valid).toBe(false);
-			expect(validateTrackName("").error).toBe("Nama entity tidak boleh kosong.");
+			expect(validateTrackName("").error).toBe(
+				"Nama entity tidak boleh kosong."
+			);
 		});
 
 		it("rejects names shorter than 2 characters", () => {
@@ -131,7 +133,9 @@ describe("validation utils", () => {
 		it("rejects counts above 10,000", () => {
 			const res = validateSpawnCount(10001);
 			expect(res.valid).toBe(false);
-			expect(res.error).toBe("Jumlah maksimal spawn adalah 10.000 track (batas akselerasi GPU).");
+			expect(res.error).toBe(
+				"Jumlah maksimal spawn adalah 10.000 track (batas akselerasi GPU)."
+			);
 		});
 
 		it("rejects non-integer counts or NaN", () => {
@@ -140,4 +144,3 @@ describe("validation utils", () => {
 		});
 	});
 });
-

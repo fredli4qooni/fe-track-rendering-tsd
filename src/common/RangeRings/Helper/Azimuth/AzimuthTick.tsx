@@ -34,7 +34,6 @@ export const AzimuthTickComponent: React.FC<AzimuthTickProps> = ({
 	);
 };
 
-
 export const AzimuthTick = memo(
 	AzimuthTickComponent,
 	(prevProps, nextProps) => {

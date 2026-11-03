@@ -6,4 +6,3 @@ declare const process: {
 		[key: string]: string | undefined;
 	};
 };
-

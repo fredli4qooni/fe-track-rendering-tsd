@@ -3,11 +3,14 @@
  * Author: Fredli Fourqoni
  */
 import React from "react";
-import { render, screen, fireEvent, act } from "@testing-library/react";
-import TacticalToolbar from "./TacticalToolbar";
-import useTrackStore from "@store/useTrackStore";
-import useOwnShipStore from "@store/useOwnShipStore";
+
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import type { Track } from "@type/track.types";
+
+import useOwnShipStore from "@store/useOwnShipStore";
+import useTrackStore from "@store/useTrackStore";
+
+import TacticalToolbar from "./TacticalToolbar";
 
 const mockTrack: Track = {
 	id: 1,
@@ -97,4 +100,3 @@ describe("TacticalToolbar component", () => {
 		confirmSpy.mockRestore();
 	});
 });
-

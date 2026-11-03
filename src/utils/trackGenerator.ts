@@ -1,4 +1,5 @@
 import { Track } from "@type/track.types";
+
 import { ICON_MAP } from "@utils/assetLoader";
 
 const OPERATIONAL_CENTER = {
@@ -6,8 +7,25 @@ const OPERATIONAL_CENTER = {
 	lat: -2
 };
 
-const CALLSIGN_PREFIXES = ["KRI", "BKN", "TNI-AL", "PAT", "TGT", "RAD", "AIS", "VSS"];
-const VESSEL_CLASSES = ["Frigate", "Corvette", "Submarine", "Patrol", "Cargo", "Tanker", "Fast Boat"];
+const CALLSIGN_PREFIXES = [
+	"KRI",
+	"BKN",
+	"TNI-AL",
+	"PAT",
+	"TGT",
+	"RAD",
+	"AIS",
+	"VSS"
+];
+const VESSEL_CLASSES = [
+	"Frigate",
+	"Corvette",
+	"Submarine",
+	"Patrol",
+	"Cargo",
+	"Tanker",
+	"Fast Boat"
+];
 
 /**
  * Generate a realistic tactical track name.
@@ -106,4 +124,3 @@ export function generateSingleTrack(
 		updatedAt: Date.now()
 	};
 }
-

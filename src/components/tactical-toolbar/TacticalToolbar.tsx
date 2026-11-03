@@ -1,10 +1,15 @@
 import React, { useState } from "react";
-import { AiOutlinePlus, AiOutlineReload, AiOutlineClear } from "react-icons/ai";
+import { AiOutlineClear, AiOutlinePlus, AiOutlineReload } from "react-icons/ai";
 import { RiRadarLine } from "react-icons/ri";
-import useTrackStore from "@store/useTrackStore";
-import useTrackHistoryStore from "@store/useTrackHistoryStore";
+
 import useOwnShipStore from "@store/useOwnShipStore";
-import { generateBatchTracks, generateSingleTrack } from "@utils/trackGenerator";
+import useTrackHistoryStore from "@store/useTrackHistoryStore";
+import useTrackStore from "@store/useTrackStore";
+
+import {
+	generateBatchTracks,
+	generateSingleTrack
+} from "@utils/trackGenerator";
 import { validateSpawnCount } from "@utils/validation";
 
 const SPAWN_PRESETS = [50, 100, 500, 1000, 2000, 5000, 10000];
@@ -41,7 +46,11 @@ export const TacticalToolbar: React.FC = () => {
 		setIsSpawning(true);
 		useTrackHistoryStore.getState().clearHistory();
 		setTimeout(() => {
-			const newTracks = generateBatchTracks(count, ownShipPos[0], ownShipPos[1]);
+			const newTracks = generateBatchTracks(
+				count,
+				ownShipPos[0],
+				ownShipPos[1]
+			);
 			setTracks(newTracks);
 			setIsSpawning(false);
 		}, 50);
@@ -51,7 +60,8 @@ export const TacticalToolbar: React.FC = () => {
 	 * Quickly add a single new tactical entity near own ship.
 	 */
 	const handleQuickAdd = () => {
-		const nextId = tracks.length > 0 ? Math.max(...tracks.map((t) => t.id)) + 1 : 1;
+		const nextId =
+			tracks.length > 0 ? Math.max(...tracks.map((t) => t.id)) + 1 : 1;
 		const newTrack = generateSingleTrack(nextId, ownShipPos[0], ownShipPos[1]);
 		addOrUpdateTrack(newTrack);
 	};
@@ -61,7 +71,11 @@ export const TacticalToolbar: React.FC = () => {
 	 */
 	const handleClearAll = () => {
 		if (tracks.length === 0) return;
-		if (window.confirm(`Bersihkan semua (${tracks.length.toLocaleString()}) entity dari peta?`)) {
+		if (
+			window.confirm(
+				`Bersihkan semua (${tracks.length.toLocaleString()}) entity dari peta?`
+			)
+		) {
 			setTracks([]);
 			useTrackStore.getState().selectTrack(undefined);
 			useTrackHistoryStore.getState().clearHistory();
@@ -76,15 +90,21 @@ export const TacticalToolbar: React.FC = () => {
 				<div className="flex items-center gap-2 pr-3 border-r border-neutral-4/70">
 					<RiRadarLine className="text-cyan-400" size={18} />
 					<div>
-						<div className="font-bold text-[13px] tracking-wide text-cyan-300">TSD SIMULATOR</div>
-						<div className="text-[10px] text-neutral-3">Track Rendering Engine</div>
+						<div className="font-bold text-[13px] tracking-wide text-cyan-300">
+							TSD SIMULATOR
+						</div>
+						<div className="text-[10px] text-neutral-3">
+							Track Rendering Engine
+						</div>
 					</div>
 				</div>
 
 				{/* Active Counter Badge */}
 				<div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/50 border border-neutral-4/50 rounded">
 					<span className="text-neutral-3">Active Tracks:</span>
-					<span className="font-mono font-bold text-cyan-400">{tracks.length.toLocaleString()}</span>
+					<span className="font-mono font-bold text-cyan-400">
+						{tracks.length.toLocaleString()}
+					</span>
 				</div>
 
 				{/* Spawner Selector */}
@@ -141,7 +161,10 @@ export const TacticalToolbar: React.FC = () => {
 						className="flex items-center gap-1 px-2.5 py-1 bg-cyan-700 hover:bg-cyan-600 disabled:opacity-50 text-white font-medium rounded transition-colors shadow-sm"
 						title="Spawn tracks secara massal"
 					>
-						<AiOutlineReload className={isSpawning ? "animate-spin" : ""} size={13} />
+						<AiOutlineReload
+							className={isSpawning ? "animate-spin" : ""}
+							size={13}
+						/>
 						<span>{isSpawning ? "Spawning..." : "Generate"}</span>
 					</button>
 				</div>
@@ -182,4 +205,3 @@ export const TacticalToolbar: React.FC = () => {
 };
 
 export default TacticalToolbar;
-

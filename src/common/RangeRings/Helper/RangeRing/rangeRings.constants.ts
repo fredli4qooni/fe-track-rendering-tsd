@@ -3,7 +3,8 @@
  * Author: Fredli Fourqoni
  */
 export const RANGE_RING_CONFIG = {
-	COLORS: "rgba(255, 255, 255, 0.15)",	LINE_WIDTH: 2,
+	COLORS: "rgba(255, 255, 255, 0.15)",
+	LINE_WIDTH: 2,
 	LINE_COLOR: "rgba(255, 255, 255, 0.5)",
 	LABEL_COLOR: "#ffffff",
 	LABEL_BG_COLOR: "rgba(255, 255, 255, 0.1)",

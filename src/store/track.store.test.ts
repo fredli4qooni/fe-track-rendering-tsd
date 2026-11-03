@@ -2,8 +2,9 @@
  * Tactical Situation Display (TSD)
  * Author: Fredli Fourqoni
  */
-import { trackStore } from "./track.store";
 import type { Track } from "@type/track.types";
+
+import { trackStore } from "./track.store";
 
 const mockTrack: Track = {
 	id: 88,
@@ -35,4 +36,3 @@ describe("trackStore vanilla store", () => {
 		expect(trackStore.getState().tracks).toHaveLength(0);
 	});
 });
-

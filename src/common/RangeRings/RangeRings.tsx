@@ -16,7 +16,6 @@ export interface RangeRingsProps {
 	config: RangeRingsConfig;
 }
 
-
 /**
  * RangeRingsComponent
  *
@@ -28,7 +27,9 @@ export interface RangeRingsProps {
  * @param props.config - Configuration object for range rings.
  * @returns React.ReactElement | null - The rendered range rings or null when hidden.
  */
-export const RangeRingsComponent: React.FC<RangeRingsProps> = (props: RangeRingsProps) => {
+export const RangeRingsComponent: React.FC<RangeRingsProps> = (
+	props: RangeRingsProps
+) => {
 	const { config } = props;
 	const {
 		currentScaleValue,
@@ -67,8 +68,8 @@ export const RangeRingsComponent: React.FC<RangeRingsProps> = (props: RangeRings
 	});
 
 	const wrapperRef = useRef<HTMLDivElement | null>(null);
-	
-		useEffect(() => {
+
+	useEffect(() => {
 		let rafId: number | null = null;
 		const el = wrapperRef.current;
 
@@ -110,8 +111,7 @@ export const RangeRingsComponent: React.FC<RangeRingsProps> = (props: RangeRings
 						el.style.transform = "translate(-50%, -50%)";
 						el.style.transition = "none";
 					}
-				} catch {
-				}
+				} catch {}
 				rafId = requestAnimationFrame(update);
 			};
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+
 import { Track } from "@type/track.types";
 
 interface DeleteConfirmDialogProps {
@@ -31,11 +32,15 @@ export const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({
 			<div className="w-full max-w-sm bg-neutral-5 border border-red-500/50 rounded-xl shadow-2xl p-5 text-white">
 				<div className="flex items-center gap-3 text-red-400 mb-3">
 					<AiOutlineExclamationCircle size={26} />
-					<h3 className="font-bold text-sm tracking-wide text-white">Konfirmasi Hapus Entity</h3>
+					<h3 className="font-bold text-sm tracking-wide text-white">
+						Konfirmasi Hapus Entity
+					</h3>
 				</div>
 
 				<p className="text-xs text-neutral-2 mb-4 leading-relaxed">
-					Apakah Anda yakin ingin menghapus entity <span className="font-bold text-white">#{track.id}</span> dari peta tactical display?
+					Apakah Anda yakin ingin menghapus entity{" "}
+					<span className="font-bold text-white">#{track.id}</span> dari peta
+					tactical display?
 				</p>
 
 				<div className="flex items-center justify-end gap-2 pt-2 border-t border-neutral-4">
@@ -63,4 +68,3 @@ export const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({
 };
 
 export default DeleteConfirmDialog;
-

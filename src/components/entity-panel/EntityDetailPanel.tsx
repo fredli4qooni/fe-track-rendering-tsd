@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import {
+	AiOutlineAim,
+	AiOutlineCheck,
 	AiOutlineClose,
 	AiOutlineCompass,
-	AiOutlineDelete,
-	AiOutlineEdit,
-	AiOutlineAim,
 	AiOutlineCopy,
-	AiOutlineCheck
+	AiOutlineDelete,
+	AiOutlineEdit
 } from "react-icons/ai";
 import { RiSpeedUpLine } from "react-icons/ri";
+
+import { AVAILABLE_TRACK_TYPES, getTrackTypeMeta } from "@type/entity.types";
 import * as maptalks from "maptalks";
-import useTrackStore from "@store/useTrackStore";
+
 import useMapStore from "@store/useMapStore";
-import { getTrackTypeMeta, AVAILABLE_TRACK_TYPES } from "@type/entity.types";
-import { EditEntityModal } from "./EditEntityModal";
+import useTrackStore from "@store/useTrackStore";
+
 import { DeleteConfirmDialog } from "./DeleteConfirmDialog";
+import { EditEntityModal } from "./EditEntityModal";
 
 /**
  * Tactical Entity Detail Drawer component.
@@ -52,7 +55,9 @@ export const EntityDetailPanel: React.FC = () => {
 	 * Copy the current latitude and longitude to the system clipboard.
 	 */
 	const handleCopyCoords = () => {
-		void navigator.clipboard.writeText(`${track.lat.toFixed(5)}, ${track.lon.toFixed(5)}`);
+		void navigator.clipboard.writeText(
+			`${track.lat.toFixed(5)}, ${track.lon.toFixed(5)}`
+		);
 		setCopied(true);
 		setTimeout(() => setCopied(false), 2000);
 	};
@@ -80,13 +85,19 @@ export const EntityDetailPanel: React.FC = () => {
 				<div className="flex items-center justify-between p-3.5 border-b border-neutral-4/80 bg-black/40">
 					<div className="flex items-center gap-2.5">
 						<div className="w-8 h-8 rounded-lg bg-black/60 border border-neutral-4/60 flex items-center justify-center p-1">
-							<img src={meta.iconUrl} alt={meta.label} className="w-full h-full object-contain" />
+							<img
+								src={meta.iconUrl}
+								alt={meta.label}
+								className="w-full h-full object-contain"
+							/>
 						</div>
 						<div>
 							<div className="font-bold text-sm tracking-wide text-cyan-300">
 								Entity #{track.id}
 							</div>
-							<div className="text-[10px] text-neutral-3">Tactical Maritime Track</div>
+							<div className="text-[10px] text-neutral-3">
+								Tactical Maritime Track
+							</div>
 						</div>
 					</div>
 
@@ -118,11 +129,15 @@ export const EntityDetailPanel: React.FC = () => {
 									</option>
 								))}
 							</select>
-							<div className={`px-2 py-1 rounded text-[10px] font-bold border ${meta.badgeBg}`}>
+							<div
+								className={`px-2 py-1 rounded text-[10px] font-bold border ${meta.badgeBg}`}
+							>
 								{meta.category.toUpperCase()}
 							</div>
 						</div>
-						<p className="text-[10px] text-neutral-3 leading-relaxed">{meta.description}</p>
+						<p className="text-[10px] text-neutral-3 leading-relaxed">
+							{meta.description}
+						</p>
 					</div>
 
 					{/* Unit Name / Callsign Box */}
@@ -148,7 +163,11 @@ export const EntityDetailPanel: React.FC = () => {
 									className="text-[10px] text-neutral-3 hover:text-cyan-400 flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-neutral-4/40"
 									title="Salin koordinat"
 								>
-									{copied ? <AiOutlineCheck className="text-green-400" /> : <AiOutlineCopy />}
+									{copied ? (
+										<AiOutlineCheck className="text-green-400" />
+									) : (
+										<AiOutlineCopy />
+									)}
 									<span>{copied ? "Tersalin" : "Salin"}</span>
 								</button>
 								<button
@@ -166,11 +185,15 @@ export const EntityDetailPanel: React.FC = () => {
 						<div className="grid grid-cols-2 gap-2 mt-1 font-mono text-[11px]">
 							<div className="bg-neutral-5/60 p-1.5 rounded border border-neutral-4/30">
 								<div className="text-[9px] text-neutral-3">LAT</div>
-								<div className="text-white font-medium">{track.lat.toFixed(5)}°</div>
+								<div className="text-white font-medium">
+									{track.lat.toFixed(5)}°
+								</div>
 							</div>
 							<div className="bg-neutral-5/60 p-1.5 rounded border border-neutral-4/30">
 								<div className="text-[9px] text-neutral-3">LON</div>
-								<div className="text-white font-medium">{track.lon.toFixed(5)}°</div>
+								<div className="text-white font-medium">
+									{track.lon.toFixed(5)}°
+								</div>
 							</div>
 						</div>
 					</div>
@@ -185,7 +208,9 @@ export const EntityDetailPanel: React.FC = () => {
 								/>
 							</div>
 							<div>
-								<div className="text-[9px] text-neutral-3 uppercase font-semibold">Course</div>
+								<div className="text-[9px] text-neutral-3 uppercase font-semibold">
+									Course
+								</div>
 								<div className="font-mono text-[11px] font-bold text-white">
 									{Math.round(track.course ?? 0)}°
 								</div>
@@ -197,7 +222,9 @@ export const EntityDetailPanel: React.FC = () => {
 								<RiSpeedUpLine size={18} />
 							</div>
 							<div>
-								<div className="text-[9px] text-neutral-3 uppercase font-semibold">Speed</div>
+								<div className="text-[9px] text-neutral-3 uppercase font-semibold">
+									Speed
+								</div>
 								<div className="font-mono text-[11px] font-bold text-white">
 									{track.speed ?? 18} kts
 								</div>

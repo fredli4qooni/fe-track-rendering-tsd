@@ -2,9 +2,11 @@
  * Tactical Situation Display (TSD)
  * Author: Fredli Fourqoni
  */
-import type { LabelPosition } from "./rangeRings.constants";
 import type { MutableRefObject, RefObject } from "react";
+
 import type * as maptalks from "maptalks";
+
+import type { LabelPosition } from "./rangeRings.constants";
 
 export interface AzimuthLabelData {
 	angle: number;

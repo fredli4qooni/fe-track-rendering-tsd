@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Track } from "@type/track.types";
+import React, { useEffect, useState } from "react";
+
 import { AVAILABLE_TRACK_TYPES, getTrackTypeMeta } from "@type/entity.types";
+import { Track } from "@type/track.types";
+
 import {
-	validateTrackName,
+	validateCourse,
 	validateLatitude,
 	validateLongitude,
-	validateCourse,
-	validateSpeed
+	validateSpeed,
+	validateTrackName
 } from "@utils/validation";
 
 interface EditEntityModalProps {
@@ -47,16 +49,12 @@ export const EditEntityModal: React.FC<EditEntityModalProps> = ({
 			setLon(String(Number(track.lon.toFixed(6))));
 			setCourse(
 				String(
-					typeof track.course === "number"
-						? Number(track.course.toFixed(2))
-						: 0
+					typeof track.course === "number" ? Number(track.course.toFixed(2)) : 0
 				)
 			);
 			setSpeed(
 				String(
-					typeof track.speed === "number"
-						? Number(track.speed.toFixed(1))
-						: 15
+					typeof track.speed === "number" ? Number(track.speed.toFixed(1)) : 15
 				)
 			);
 			setErrors({});
@@ -117,7 +115,11 @@ export const EditEntityModal: React.FC<EditEntityModalProps> = ({
 				{/* Modal Header */}
 				<div className="flex items-center justify-between px-5 py-4 border-b border-neutral-4 bg-black/40">
 					<div className="flex items-center gap-2">
-						<img src={currentMeta.iconUrl} alt={currentMeta.label} className="w-6 h-6 object-contain" />
+						<img
+							src={currentMeta.iconUrl}
+							alt={currentMeta.label}
+							className="w-6 h-6 object-contain"
+						/>
 						<h3 className="font-bold text-sm tracking-wide text-cyan-300">
 							Edit Tactical Entity #{track.id}
 						</h3>
@@ -132,12 +134,20 @@ export const EditEntityModal: React.FC<EditEntityModalProps> = ({
 				</div>
 
 				{/* Form Body */}
-				<form onSubmit={handleValidateAndSave} noValidate className="p-5 flex flex-col gap-4 text-xs">
+				<form
+					onSubmit={handleValidateAndSave}
+					noValidate
+					className="p-5 flex flex-col gap-4 text-xs"
+				>
 					{/* Name Field */}
 					<div className="flex flex-col gap-1">
 						<div className="flex items-center justify-between">
-							<label className="font-medium text-neutral-2">Nama / Call Sign Entity *</label>
-							<span className="text-[10px] text-neutral-3">Mendukung multi-baris label</span>
+							<label className="font-medium text-neutral-2">
+								Nama / Call Sign Entity *
+							</label>
+							<span className="text-[10px] text-neutral-3">
+								Mendukung multi-baris label
+							</span>
 						</div>
 						<textarea
 							rows={3}
@@ -149,12 +159,16 @@ export const EditEntityModal: React.FC<EditEntityModalProps> = ({
 							className="w-full bg-black/60 border border-neutral-4 rounded p-2 text-white focus:outline-none focus:border-cyan-400 font-mono text-xs resize-none"
 							placeholder="Contoh:&#10;BKN-0025&#10;Cargo #25&#10;Type-1"
 						/>
-						{errors.name && <span className="text-red-400 text-[11px]">⚠ {errors.name}</span>}
+						{errors.name && (
+							<span className="text-red-400 text-[11px]">⚠ {errors.name}</span>
+						)}
 					</div>
 
 					{/* Type / Classification Field */}
 					<div className="flex flex-col gap-1">
-						<label className="font-medium text-neutral-2">Klasifikasi Taktis *</label>
+						<label className="font-medium text-neutral-2">
+							Klasifikasi Taktis *
+						</label>
 						<div className="grid grid-cols-2 gap-2">
 							{AVAILABLE_TRACK_TYPES.map((tMeta) => (
 								<button
@@ -167,8 +181,14 @@ export const EditEntityModal: React.FC<EditEntityModalProps> = ({
 											: "bg-black/40 border-neutral-4/60 text-neutral-3 hover:text-white hover:border-neutral-3"
 									}`}
 								>
-									<img src={tMeta.iconUrl} alt={tMeta.label} className="w-5 h-5 object-contain" />
-									<span className="text-[11px] truncate font-medium">{tMeta.label}</span>
+									<img
+										src={tMeta.iconUrl}
+										alt={tMeta.label}
+										className="w-5 h-5 object-contain"
+									/>
+									<span className="text-[11px] truncate font-medium">
+										{tMeta.label}
+									</span>
 								</button>
 							))}
 						</div>
@@ -189,11 +209,15 @@ export const EditEntityModal: React.FC<EditEntityModalProps> = ({
 								className="w-full bg-black/60 border border-neutral-4 rounded p-2 text-white focus:outline-none focus:border-cyan-400 font-mono text-xs"
 								placeholder="-90 s/d 90"
 							/>
-							{errors.lat && <span className="text-red-400 text-[11px]">⚠ {errors.lat}</span>}
+							{errors.lat && (
+								<span className="text-red-400 text-[11px]">⚠ {errors.lat}</span>
+							)}
 						</div>
 
 						<div className="flex flex-col gap-1">
-							<label className="font-medium text-neutral-2">Longitude (°)</label>
+							<label className="font-medium text-neutral-2">
+								Longitude (°)
+							</label>
 							<input
 								type="number"
 								step="any"
@@ -205,14 +229,18 @@ export const EditEntityModal: React.FC<EditEntityModalProps> = ({
 								className="w-full bg-black/60 border border-neutral-4 rounded p-2 text-white focus:outline-none focus:border-cyan-400 font-mono text-xs"
 								placeholder="-180 s/d 180"
 							/>
-							{errors.lon && <span className="text-red-400 text-[11px]">⚠ {errors.lon}</span>}
+							{errors.lon && (
+								<span className="text-red-400 text-[11px]">⚠ {errors.lon}</span>
+							)}
 						</div>
 					</div>
 
 					{/* Kinematics Row (Course & Speed) */}
 					<div className="grid grid-cols-2 gap-3">
 						<div className="flex flex-col gap-1">
-							<label className="font-medium text-neutral-2">Course / Haluan (°)</label>
+							<label className="font-medium text-neutral-2">
+								Course / Haluan (°)
+							</label>
 							<input
 								type="number"
 								step="any"
@@ -221,16 +249,23 @@ export const EditEntityModal: React.FC<EditEntityModalProps> = ({
 								value={course}
 								onChange={(e) => {
 									setCourse(e.target.value);
-									if (errors.course) setErrors((prev) => ({ ...prev, course: "" }));
+									if (errors.course)
+										setErrors((prev) => ({ ...prev, course: "" }));
 								}}
 								className="w-full bg-black/60 border border-neutral-4 rounded p-2 text-white focus:outline-none focus:border-cyan-400 font-mono text-xs"
 								placeholder="0 - 360"
 							/>
-							{errors.course && <span className="text-red-400 text-[11px]">⚠ {errors.course}</span>}
+							{errors.course && (
+								<span className="text-red-400 text-[11px]">
+									⚠ {errors.course}
+								</span>
+							)}
 						</div>
 
 						<div className="flex flex-col gap-1">
-							<label className="font-medium text-neutral-2">Speed (Knots)</label>
+							<label className="font-medium text-neutral-2">
+								Speed (Knots)
+							</label>
 							<input
 								type="number"
 								step="any"
@@ -239,12 +274,17 @@ export const EditEntityModal: React.FC<EditEntityModalProps> = ({
 								value={speed}
 								onChange={(e) => {
 									setSpeed(e.target.value);
-									if (errors.speed) setErrors((prev) => ({ ...prev, speed: "" }));
+									if (errors.speed)
+										setErrors((prev) => ({ ...prev, speed: "" }));
 								}}
 								className="w-full bg-black/60 border border-neutral-4 rounded p-2 text-white focus:outline-none focus:border-cyan-400 font-mono text-xs"
 								placeholder="0 - 120"
 							/>
-							{errors.speed && <span className="text-red-400 text-[11px]">⚠ {errors.speed}</span>}
+							{errors.speed && (
+								<span className="text-red-400 text-[11px]">
+									⚠ {errors.speed}
+								</span>
+							)}
 						</div>
 					</div>
 
@@ -271,4 +311,3 @@ export const EditEntityModal: React.FC<EditEntityModalProps> = ({
 };
 
 export default EditEntityModal;
-

@@ -3,11 +3,14 @@
  * Author: Fredli Fourqoni
  */
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import EntityDetailPanel from "./EntityDetailPanel";
-import useTrackStore from "@store/useTrackStore";
-import useMapStore from "@store/useMapStore";
+
+import { fireEvent, render, screen } from "@testing-library/react";
 import type { Track } from "@type/track.types";
+
+import useMapStore from "@store/useMapStore";
+import useTrackStore from "@store/useTrackStore";
+
+import EntityDetailPanel from "./EntityDetailPanel";
 
 const mockTrack: Track = {
 	id: 101,
@@ -56,7 +59,9 @@ describe("EntityDetailPanel component", () => {
 		const select = screen.getByRole("combobox");
 		fireEvent.change(select, { target: { value: "3" } });
 
-		const updatedTrack = useTrackStore.getState().tracks.find((t) => t.id === 101);
+		const updatedTrack = useTrackStore
+			.getState()
+			.tracks.find((t) => t.id === 101);
 		expect(updatedTrack?.type).toBe(3);
 	});
 
@@ -117,4 +122,3 @@ describe("EntityDetailPanel component", () => {
 		expect(useTrackStore.getState().selectedTrack).toBeUndefined();
 	});
 });
-

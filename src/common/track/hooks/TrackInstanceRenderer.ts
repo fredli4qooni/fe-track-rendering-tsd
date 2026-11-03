@@ -2,12 +2,12 @@
  * Tactical Situation Display (TSD)
  * Author: Fredli Fourqoni
  */
-import { DataTexture } from "@utils/DataTexture";
 import type { Track } from "@type/track.types";
 import * as maptalks from "maptalks";
 
 import type { RaycastCandidate } from "@common/raycast/Raycaster";
 
+import { DataTexture } from "@utils/DataTexture";
 import { ICON_MAP, loadTextureArray } from "@utils/assetLoader";
 
 import trackFrag from "../shaders/track.frag";

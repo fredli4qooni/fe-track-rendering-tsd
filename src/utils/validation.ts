@@ -36,7 +36,10 @@ export function validateLatitude(lat: number): ValidationResult {
 		return { valid: false, error: "Latitude harus berupa angka valid." };
 	}
 	if (lat < -90 || lat > 90) {
-		return { valid: false, error: "Latitude harus berada dalam rentang -90° s/d +90°." };
+		return {
+			valid: false,
+			error: "Latitude harus berada dalam rentang -90° s/d +90°."
+		};
 	}
 	return { valid: true };
 }
@@ -51,7 +54,10 @@ export function validateLongitude(lon: number): ValidationResult {
 		return { valid: false, error: "Longitude harus berupa angka valid." };
 	}
 	if (lon < -180 || lon > 180) {
-		return { valid: false, error: "Longitude harus berada dalam rentang -180° s/d +180°." };
+		return {
+			valid: false,
+			error: "Longitude harus berada dalam rentang -180° s/d +180°."
+		};
 	}
 	return { valid: true };
 }
@@ -69,7 +75,10 @@ export function validateSpawnCount(count: number): ValidationResult {
 		return { valid: false, error: "Jumlah minimal spawn adalah 50 track." };
 	}
 	if (count > 10000) {
-		return { valid: false, error: "Jumlah maksimal spawn adalah 10.000 track (batas akselerasi GPU)." };
+		return {
+			valid: false,
+			error: "Jumlah maksimal spawn adalah 10.000 track (batas akselerasi GPU)."
+		};
 	}
 	return { valid: true };
 }
@@ -81,7 +90,10 @@ export function validateSpawnCount(count: number): ValidationResult {
  */
 export function validateCourse(course: number): ValidationResult {
 	if (Number.isNaN(course) || course < 0 || course > 360) {
-		return { valid: false, error: "Course / haluan harus berada antara 0° s/d 360°." };
+		return {
+			valid: false,
+			error: "Course / haluan harus berada antara 0° s/d 360°."
+		};
 	}
 	return { valid: true };
 }
@@ -93,8 +105,10 @@ export function validateCourse(course: number): ValidationResult {
  */
 export function validateSpeed(speed: number): ValidationResult {
 	if (Number.isNaN(speed) || speed < 0 || speed > 120) {
-		return { valid: false, error: "Kecepatan harus berada antara 0 s/d 120 knots." };
+		return {
+			valid: false,
+			error: "Kecepatan harus berada antara 0 s/d 120 knots."
+		};
 	}
 	return { valid: true };
 }
-

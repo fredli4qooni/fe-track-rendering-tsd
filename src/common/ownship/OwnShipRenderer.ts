@@ -3,6 +3,7 @@
  * Author: Fredli Fourqoni
  */
 import * as maptalks from "maptalks";
+
 import type { RaycastCandidate } from "@common/raycast/Raycaster";
 
 import ownshipFrag from "./shaders/ownship.frag";

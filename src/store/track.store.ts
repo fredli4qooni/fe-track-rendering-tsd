@@ -2,8 +2,8 @@
  * Tactical Situation Display (TSD)
  * Author: Fredli Fourqoni
  */
-import { createStore } from "zustand/vanilla";
 import type { Track } from "@type/track.types";
+import { createStore } from "zustand/vanilla";
 
 export interface TrackState {
 	tracks: Track[];
@@ -30,10 +30,9 @@ export const trackStore = createStore<TrackState>((set) => ({
 		const direct: Track[] = tracks.map((t) => ({ ...t }));
 		set((state) => ({
 			tracks: direct,
-			selectedTrack:
-				direct.some((t) => t.id === state.selectedTrack)
-					? state.selectedTrack
-					: undefined
+			selectedTrack: direct.some((t) => t.id === state.selectedTrack)
+				? state.selectedTrack
+				: undefined
 		}));
 	},
 
@@ -69,7 +68,8 @@ export const trackStore = createStore<TrackState>((set) => ({
 	removeTrack: (id: number) =>
 		set((state) => ({
 			tracks: state.tracks.filter((t) => t.id !== id),
-			selectedTrack: state.selectedTrack === id ? undefined : state.selectedTrack
+			selectedTrack:
+				state.selectedTrack === id ? undefined : state.selectedTrack
 		})),
 
 	setTrackTargets: (targets) =>
@@ -124,4 +124,3 @@ export const trackStore = createStore<TrackState>((set) => ({
 			};
 		})
 }));
-

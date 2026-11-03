@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 
 import useTrackStore from "@store/useTrackStore";
+
 import useOwnShipMover from "@hooks/useOwnShipMover";
 import useTrackMover from "@hooks/useTrackMover";
+
 import TrackMap from "@component/TrackMap";
+
 import { generateBatchTracks } from "@utils/trackGenerator";
 
 /**

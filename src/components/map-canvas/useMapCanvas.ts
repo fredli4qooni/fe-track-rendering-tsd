@@ -461,8 +461,7 @@ export const useMapCanvas = (ownShipConfig?: OwnShipConfig) => {
 				const shipPos = useOwnShipStore.getState().position;
 				userOffset = { dx: center.x - shipPos[0], dy: center.y - shipPos[1] };
 				lastUserInteraction = true;
-			} catch {
-			}
+			} catch {}
 		};
 
 		const unsubCameraFollow = useOwnShipStore.subscribe((s) => {
@@ -507,8 +506,7 @@ export const useMapCanvas = (ownShipConfig?: OwnShipConfig) => {
 					};
 					lastUserInteraction = false;
 				}
-			} catch {
-			}
+			} catch {}
 
 			prevFollow = s.isFollowing;
 			prevOwnShipPos = s.position;

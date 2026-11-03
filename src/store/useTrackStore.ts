@@ -3,7 +3,8 @@
  * Author: Fredli Fourqoni
  */
 import { useStore } from "zustand";
-import { trackStore, TrackState } from "./track.store";
+
+import { TrackState, trackStore } from "./track.store";
 
 export type { Track } from "@type/track.types";
 export type { TrackState } from "./track.store";
@@ -17,10 +18,7 @@ export type { TrackState } from "./track.store";
 export function useTrackStore<T = TrackState>(
 	selector?: (state: TrackState) => T
 ): T {
-	return useStore(
-		trackStore,
-		selector ?? ((s) => s as unknown as T)
-	);
+	return useStore(trackStore, selector ?? ((s) => s as unknown as T));
 }
 
 useTrackStore.getState = trackStore.getState;

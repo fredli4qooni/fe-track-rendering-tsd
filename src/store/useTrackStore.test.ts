@@ -2,8 +2,9 @@
  * Tactical Situation Display (TSD)
  * Author: Fredli Fourqoni
  */
-import { useTrackStore } from "./useTrackStore";
 import type { Track } from "@type/track.types";
+
+import { useTrackStore } from "./useTrackStore";
 
 const mockTrack1: Track = {
 	id: 1,
@@ -123,9 +124,9 @@ describe("useTrackStore", () => {
 	it("updates coordinates of existing tracks via setTrackTargets", () => {
 		useTrackStore.getState().setTracks([mockTrack1, mockTrack2]);
 
-		useTrackStore.getState().setTrackTargets([
-			{ id: 1, lon: 118.5, lat: -2.2, course: 95 }
-		]);
+		useTrackStore
+			.getState()
+			.setTrackTargets([{ id: 1, lon: 118.5, lat: -2.2, course: 95 }]);
 
 		const tracks = useTrackStore.getState().tracks;
 		expect(tracks[0].lon).toBe(118.5);
@@ -151,4 +152,3 @@ describe("useTrackStore", () => {
 		expect(useTrackStore.getState().selectedTrack).toBeUndefined();
 	});
 });
-

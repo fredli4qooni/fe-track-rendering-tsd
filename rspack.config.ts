@@ -171,7 +171,7 @@ export default defineConfig({
 		isDev
 			? new RefreshPlugin({
 					exclude: reactRefreshWorkerExclude
-			  })
+				})
 			: null
 	].filter(Boolean),
 	optimization: {

@@ -3,9 +3,11 @@
  * Author: Fredli Fourqoni
  */
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import DeleteConfirmDialog from "./DeleteConfirmDialog";
+
+import { fireEvent, render, screen } from "@testing-library/react";
 import type { Track } from "@type/track.types";
+
+import DeleteConfirmDialog from "./DeleteConfirmDialog";
 
 const mockTrack: Track = {
 	id: 55,
@@ -76,4 +78,3 @@ describe("DeleteConfirmDialog component", () => {
 		expect(onClose).toHaveBeenCalledTimes(1);
 	});
 });
-

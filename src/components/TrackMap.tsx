@@ -4,10 +4,10 @@
  */
 import React from "react";
 
+import EntityDetailPanel from "./entity-panel/EntityDetailPanel";
 import MapCanvas from "./map-canvas/MapCanvas";
 import MapTools from "./map-tools/MapTools";
 import TacticalToolbar from "./tactical-toolbar/TacticalToolbar";
-import EntityDetailPanel from "./entity-panel/EntityDetailPanel";
 
 const TrackMap = () => {
 	return (

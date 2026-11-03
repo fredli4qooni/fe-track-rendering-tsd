@@ -25,7 +25,8 @@ export interface TacticalEntity {
 	status: EntityStatus;
 }
 
-export type TacticalCategory = "friendly" | "hostile" | "neutral" | "unknown" | "nav";
+export type TacticalCategory =
+	"friendly" | "hostile" | "neutral" | "unknown" | "nav";
 
 export interface TrackTypeMeta {
 	type: number;
@@ -45,7 +46,8 @@ export const TRACK_TYPE_META: Record<number, TrackTypeMeta> = {
 		color: "#00E5FF",
 		badgeBg: "bg-cyan-900/60 text-cyan-300 border-cyan-500/50",
 		iconUrl: friendlySuspected,
-		description: "Presumed allied vessel or sensor awaiting positive IFF confirmation."
+		description:
+			"Presumed allied vessel or sensor awaiting positive IFF confirmation."
 	},
 	1: {
 		type: 1,
@@ -63,7 +65,8 @@ export const TRACK_TYPE_META: Record<number, TrackTypeMeta> = {
 		color: "#FF9100",
 		badgeBg: "bg-amber-900/60 text-amber-300 border-amber-500/50",
 		iconUrl: hostileUnconfirmed,
-		description: "Suspected hostile contact exhibiting aggressive or uncooperative profile."
+		description:
+			"Suspected hostile contact exhibiting aggressive or uncooperative profile."
 	},
 	3: {
 		type: 3,
@@ -72,7 +75,8 @@ export const TRACK_TYPE_META: Record<number, TrackTypeMeta> = {
 		color: "#00E676",
 		badgeBg: "bg-emerald-900/60 text-emerald-300 border-emerald-500/50",
 		iconUrl: supportPoint,
-		description: "Forward operating base, supply vessel, or tactical staging point."
+		description:
+			"Forward operating base, supply vessel, or tactical staging point."
 	},
 	4: {
 		type: 4,
@@ -81,7 +85,8 @@ export const TRACK_TYPE_META: Record<number, TrackTypeMeta> = {
 		color: "#FFEA00",
 		badgeBg: "bg-yellow-900/60 text-yellow-300 border-yellow-500/50",
 		iconUrl: unknownSurface,
-		description: "Unidentified radar or AIS blip pending visual/electronic recognition."
+		description:
+			"Unidentified radar or AIS blip pending visual/electronic recognition."
 	},
 	5: {
 		type: 5,
@@ -90,7 +95,8 @@ export const TRACK_TYPE_META: Record<number, TrackTypeMeta> = {
 		color: "#B0BEC5",
 		badgeBg: "bg-slate-800/60 text-slate-300 border-slate-500/50",
 		iconUrl: waypoint,
-		description: "Tactical navigational reference waypoint or patrol checkpoint."
+		description:
+			"Tactical navigational reference waypoint or patrol checkpoint."
 	}
 };
 

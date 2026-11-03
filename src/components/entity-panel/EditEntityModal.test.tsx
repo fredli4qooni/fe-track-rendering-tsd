@@ -3,9 +3,11 @@
  * Author: Fredli Fourqoni
  */
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import EditEntityModal from "./EditEntityModal";
+
+import { fireEvent, render, screen } from "@testing-library/react";
 import type { Track } from "@type/track.types";
+
+import EditEntityModal from "./EditEntityModal";
 
 const mockTrack: Track = {
 	id: 77,
@@ -68,7 +70,9 @@ describe("EditEntityModal component", () => {
 		const saveBtn = screen.getByRole("button", { name: "Simpan Perubahan" });
 		fireEvent.click(saveBtn);
 
-		expect(screen.getByText(/Nama entity tidak boleh kosong/i)).toBeInTheDocument();
+		expect(
+			screen.getByText(/Nama entity tidak boleh kosong/i)
+		).toBeInTheDocument();
 		expect(onSave).not.toHaveBeenCalled();
 	});
 
@@ -99,4 +103,3 @@ describe("EditEntityModal component", () => {
 		expect(onClose).toHaveBeenCalled();
 	});
 });
-

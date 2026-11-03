@@ -215,8 +215,7 @@ export class OwnShipLayerRenderer extends maptalks.renderer.CanvasRenderer {
 		if (this.ownShipRenderer) {
 			try {
 				this.ownShipRenderer.dispose();
-			} catch {
-			}
+			} catch {}
 			this.ownShipRenderer = null;
 		}
 	}
