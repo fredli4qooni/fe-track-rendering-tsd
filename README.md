@@ -173,4 +173,5 @@ Instruksi konvensi, aturan arsitektur, dan pedoman coding untuk AI agents dapat 
 ## 👤 Author & Submission
 
 - **Nama**: Fredli Fourqoni
-- **Repository**: [https://github.com/fredli4qooni/fe-track-rendering-tsd.git](https://github.com/fredli4qooni/fe-track-rendering-tsd.git)
+- **Frontend Repository**: [https://github.com/fredli4qooni/fe-track-rendering-tsd.git](https://github.com/fredli4qooni/fe-track-rendering-tsd.git)
+- **Backend Repository**: [https://github.com/fredli4qooni/be-track-rendering-tsd.git](https://github.com/fredli4qooni/be-track-rendering-tsd.git)
