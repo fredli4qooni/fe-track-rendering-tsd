@@ -1,0 +1,19 @@
+networks:
+  default:
+    name: cms_network
+    external: true
+
+services:
+  web:
+    build: .
+    image: "deviot442/${SERVICE_NAME_DOCKER}:${BUILD_TAG}"
+    container_name: "${SERVICE_NAME_DOCKER}"
+    ports:
+      name: ${SERVICE_NAME_DOCKER}
+      target: ${PORT}
+      published: ${TARGET_PORT}
+      protocol: tcp
+      mode: host
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
+    restart: unless-stopped
