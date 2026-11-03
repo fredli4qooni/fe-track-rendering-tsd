@@ -99,4 +99,18 @@ describe("TacticalToolbar component", () => {
 		expect(useTrackStore.getState().tracks).toHaveLength(0);
 		confirmSpy.mockRestore();
 	});
+
+	it("renders backend connection badge and handles Load DB click", () => {
+		useTrackStore.setState({ isBackendOnline: true });
+		const loadSpy = jest
+			.spyOn(useTrackStore.getState(), "loadFromBackend")
+			.mockResolvedValue();
+
+		render(<TacticalToolbar />);
+		expect(screen.getByText("DB: Online")).toBeInTheDocument();
+
+		const loadBtn = screen.getByText("Load DB");
+		fireEvent.click(loadBtn);
+		expect(loadSpy).toHaveBeenCalled();
+	});
 });

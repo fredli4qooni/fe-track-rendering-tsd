@@ -29,8 +29,12 @@ export const EntityDetailPanel: React.FC = () => {
 	const track = useTrackStore((state) =>
 		state.tracks.find((t) => t.id === selectedTrackId)
 	);
-	const updateTrack = useTrackStore((state) => state.updateTrack);
-	const removeTrack = useTrackStore((state) => state.removeTrack);
+	const saveTrackUpdateToBackend = useTrackStore(
+		(state) => state.saveTrackUpdateToBackend
+	);
+	const deleteTrackFromBackend = useTrackStore(
+		(state) => state.deleteTrackFromBackend
+	);
 	const selectTrack = useTrackStore((state) => state.selectTrack);
 	const mapInstance = useMapStore((state) => state.map);
 
@@ -67,14 +71,17 @@ export const EntityDetailPanel: React.FC = () => {
 	 * @param newType - New tactical type index (0..5)
 	 */
 	const handleTypeChange = (newType: number) => {
-		updateTrack(track.id, { type: newType, updatedAt: Date.now() });
+		void saveTrackUpdateToBackend(track.id, {
+			type: newType,
+			updatedAt: Date.now()
+		});
 	};
 
 	/**
-	 * Confirm deletion of the selected track from the store.
+	 * Confirm deletion of the selected track from the store and backend database.
 	 */
 	const handleDeleteConfirm = () => {
-		removeTrack(track.id);
+		void deleteTrackFromBackend(track.id);
 		selectTrack(undefined);
 	};
 
@@ -261,7 +268,7 @@ export const EntityDetailPanel: React.FC = () => {
 				track={track}
 				isOpen={isEditOpen}
 				onClose={() => setIsEditOpen(false)}
-				onSave={(updated) => updateTrack(track.id, updated)}
+				onSave={(updated) => void saveTrackUpdateToBackend(track.id, updated)}
 			/>
 
 			{/* Delete Confirm Dialog */}

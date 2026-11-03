@@ -1,5 +1,14 @@
-import React, { useState } from "react";
-import { AiOutlineClear, AiOutlinePlus, AiOutlineReload } from "react-icons/ai";
+/**
+ * Tactical Situation Display (TSD)
+ * Author: Fredli Fourqoni
+ */
+import React, { useEffect, useState } from "react";
+import {
+	AiOutlineClear,
+	AiOutlineDatabase,
+	AiOutlinePlus,
+	AiOutlineReload
+} from "react-icons/ai";
 import { RiRadarLine } from "react-icons/ri";
 
 import useOwnShipStore from "@store/useOwnShipStore";
@@ -16,12 +25,20 @@ const SPAWN_PRESETS = [50, 100, 500, 1000, 2000, 5000, 10000];
 
 /**
  * Tactical Toolbar component for spawning batches, quick adding entities, and clearing the map.
+ * Also provides real-time Go backend database synchronization controls.
  * @returns React functional component rendering the top tactical action bar
  */
 export const TacticalToolbar: React.FC = () => {
 	const tracks = useTrackStore((state) => state.tracks);
 	const setTracks = useTrackStore((state) => state.setTracks);
-	const addOrUpdateTrack = useTrackStore((state) => state.addOrUpdateTrack);
+	const isBackendOnline = useTrackStore((state) => state.isBackendOnline);
+	const isSyncing = useTrackStore((state) => state.isSyncing);
+	const syncError = useTrackStore((state) => state.syncError);
+	const loadFromBackend = useTrackStore((state) => state.loadFromBackend);
+	const saveNewTrackToBackend = useTrackStore(
+		(state) => state.saveNewTrackToBackend
+	);
+	const syncHealthCheck = useTrackStore((state) => state.syncHealthCheck);
 	const ownShipPos = useOwnShipStore((state) => state.position);
 
 	const [selectedPreset, setSelectedPreset] = useState<number>(2000);
@@ -29,6 +46,15 @@ export const TacticalToolbar: React.FC = () => {
 	const [isCustomMode, setIsCustomMode] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
 	const [isSpawning, setIsSpawning] = useState<boolean>(false);
+
+	// Check backend health periodically
+	useEffect(() => {
+		void syncHealthCheck();
+		const timer = setInterval(() => {
+			void syncHealthCheck();
+		}, 10000);
+		return () => clearInterval(timer);
+	}, [syncHealthCheck]);
 
 	/**
 	 * Spawn a batch of tactical entities based on selected preset or custom input count.
@@ -57,13 +83,22 @@ export const TacticalToolbar: React.FC = () => {
 	};
 
 	/**
-	 * Quickly add a single new tactical entity near own ship.
+	 * Quickly add a single new tactical entity near own ship and persist to backend if online.
 	 */
 	const handleQuickAdd = () => {
 		const nextId =
 			tracks.length > 0 ? Math.max(...tracks.map((t) => t.id)) + 1 : 1;
-		const newTrack = generateSingleTrack(nextId, ownShipPos[0], ownShipPos[1]);
-		addOrUpdateTrack(newTrack);
+		const rawTrack = generateSingleTrack(nextId, ownShipPos[0], ownShipPos[1]);
+		void saveNewTrackToBackend(rawTrack);
+	};
+
+	/**
+	 * Load tactical entities persisted in the Go SQLite backend.
+	 */
+	const handleLoadBackend = () => {
+		setError(null);
+		useTrackHistoryStore.getState().clearHistory();
+		void loadFromBackend();
 	};
 
 	/**
@@ -107,8 +142,44 @@ export const TacticalToolbar: React.FC = () => {
 					</span>
 				</div>
 
+				{/* Backend Connection Badge */}
+				<div
+					className={`flex items-center gap-1.5 px-2 py-1 rounded border text-[11px] ${
+						isBackendOnline
+							? "bg-emerald-950/70 border-emerald-500/50 text-emerald-300"
+							: "bg-amber-950/70 border-amber-500/50 text-amber-300"
+					}`}
+					title={
+						isBackendOnline
+							? "Connected to Go Backend REST API (SQLite)"
+							: "Backend offline — running local in-memory simulation"
+					}
+				>
+					<span
+						className={`w-2 h-2 rounded-full ${
+							isBackendOnline ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
+						}`}
+					/>
+					<span>{isBackendOnline ? "DB: Online" : "DB: Standalone"}</span>
+				</div>
+
+				{/* Load from Backend Button */}
+				<button
+					type="button"
+					onClick={handleLoadBackend}
+					disabled={isSyncing}
+					className="flex items-center gap-1 px-2.5 py-1 bg-neutral-4/60 hover:bg-neutral-4/90 disabled:opacity-50 text-neutral-1 font-medium rounded transition-colors"
+					title="Ambil dan sinkronisasikan entity dari database backend Go"
+				>
+					<AiOutlineDatabase
+						className={isSyncing ? "animate-spin" : ""}
+						size={13}
+					/>
+					<span>{isSyncing ? "Loading DB..." : "Load DB"}</span>
+				</button>
+
 				{/* Spawner Selector */}
-				<div className="flex items-center gap-1.5 pl-1">
+				<div className="flex items-center gap-1.5 pl-1 border-l border-neutral-4/70">
 					<span className="text-neutral-3">Spawn:</span>
 					{!isCustomMode ? (
 						<select
@@ -175,7 +246,7 @@ export const TacticalToolbar: React.FC = () => {
 						type="button"
 						onClick={handleQuickAdd}
 						className="flex items-center gap-1 px-2 py-1 bg-primary-20 hover:bg-primary-20/80 text-white rounded transition-colors"
-						title="Tambah 1 entity baru di dekat kapal sendiri"
+						title="Tambah 1 entity baru di dekat kapal sendiri (tersimpan ke database)"
 					>
 						<AiOutlinePlus size={13} />
 						<span>+1 Track</span>
@@ -195,9 +266,9 @@ export const TacticalToolbar: React.FC = () => {
 			</div>
 
 			{/* Inline Error Toast if any */}
-			{error && (
+			{(error || syncError) && (
 				<div className="px-3 py-1.5 bg-red-950/90 border border-red-500/80 text-red-200 text-xs rounded shadow-lg animate-pulse">
-					⚠ {error}
+					⚠ {error || syncError}
 				</div>
 			)}
 		</div>

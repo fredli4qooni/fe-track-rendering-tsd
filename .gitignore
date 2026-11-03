@@ -10,6 +10,10 @@ coverage
 .env
 doc
 
+# Go Workspaces
+go.work
+go.work.sum
+
 # IDE
 .vscode/*
 !.vscode/extensions.json

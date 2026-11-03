@@ -5,14 +5,27 @@
 import type { Track } from "@type/track.types";
 import { createStore } from "zustand/vanilla";
 
+import {
+	checkBackendHealth,
+	createEntityInBackend,
+	deleteEntityInBackend,
+	fetchEntitiesFromBackend,
+	updateEntityInBackend
+} from "@utils/entityApi";
+
 export interface TrackState {
 	tracks: Track[];
 	selectedTrack?: number;
+	isBackendOnline: boolean;
+	isSyncing: boolean;
+	syncError: string | null;
+
 	setTracks: (tracks: Track[]) => void;
 	addOrUpdateTrack: (track: Track) => void;
 	updateTrack: (id: number, track: Partial<Track>) => void;
 	removeTrack: (id: number) => void;
 	selectTrack: (id: number | undefined) => void;
+	setIsBackendOnline: (status: boolean) => void;
 	setTrackTargets: (
 		targets: {
 			id: number;
@@ -21,10 +34,28 @@ export interface TrackState {
 			course?: number;
 		}[]
 	) => void;
+
+	// Backend API Synchronization Methods
+	syncHealthCheck: () => Promise<boolean>;
+	loadFromBackend: () => Promise<void>;
+	saveNewTrackToBackend: (track: Omit<Track, "id">) => Promise<Track>;
+	saveTrackUpdateToBackend: (
+		id: number,
+		patch: Partial<Track>
+	) => Promise<void>;
+	deleteTrackFromBackend: (id: number) => Promise<void>;
 }
 
-export const trackStore = createStore<TrackState>((set) => ({
+export const trackStore = createStore<TrackState>((set, get) => ({
 	tracks: [],
+	selectedTrack: undefined,
+	isBackendOnline: false,
+	isSyncing: false,
+	syncError: null,
+
+	setIsBackendOnline: (status: boolean) => {
+		set({ isBackendOnline: status });
+	},
 
 	setTracks: (tracks: Track[]) => {
 		const direct: Track[] = tracks.map((t) => ({ ...t }));
@@ -122,5 +153,91 @@ export const trackStore = createStore<TrackState>((set) => ({
 				tracks: newTracks,
 				selectedTrack: id
 			};
-		})
+		}),
+
+	syncHealthCheck: async () => {
+		try {
+			const res = await checkBackendHealth();
+			set({ isBackendOnline: res.online });
+			return res.online;
+		} catch {
+			set({ isBackendOnline: false });
+			return false;
+		}
+	},
+
+	loadFromBackend: async () => {
+		set({ isSyncing: true, syncError: null });
+		try {
+			const entities = await fetchEntitiesFromBackend();
+			get().setTracks(entities);
+			set({ isBackendOnline: true, isSyncing: false });
+		} catch (err) {
+			const msg =
+				err instanceof Error
+					? err.message
+					: "Gagal memuat entitas dari backend";
+			set({ isSyncing: false, syncError: msg, isBackendOnline: false });
+		}
+	},
+
+	saveNewTrackToBackend: async (trackData: Omit<Track, "id">) => {
+		const isOnline = get().isBackendOnline;
+		if (isOnline) {
+			try {
+				const created = await createEntityInBackend(trackData);
+				get().addOrUpdateTrack(created);
+				return created;
+			} catch (err) {
+				const msg =
+					err instanceof Error
+						? err.message
+						: "Gagal menyimpan entitas ke backend";
+				set({ syncError: msg });
+			}
+		}
+
+		// Fallback for standalone offline simulation
+		const tracks = get().tracks;
+		const nextId =
+			tracks.length > 0 ? Math.max(...tracks.map((t) => t.id)) + 1 : 1;
+		const fallbackTrack: Track = {
+			...trackData,
+			id: nextId
+		};
+		get().addOrUpdateTrack(fallbackTrack);
+		return fallbackTrack;
+	},
+
+	saveTrackUpdateToBackend: async (id: number, patch: Partial<Track>) => {
+		get().updateTrack(id, patch);
+		const isOnline = get().isBackendOnline;
+		if (isOnline) {
+			try {
+				await updateEntityInBackend(id, patch);
+			} catch (err) {
+				const msg =
+					err instanceof Error
+						? err.message
+						: "Gagal memperbarui entitas di backend";
+				set({ syncError: msg });
+			}
+		}
+	},
+
+	deleteTrackFromBackend: async (id: number) => {
+		get().removeTrack(id);
+		const isOnline = get().isBackendOnline;
+		if (isOnline) {
+			try {
+				await deleteEntityInBackend(id);
+			} catch (err) {
+				const msg =
+					err instanceof Error
+						? err.message
+						: "Gagal menghapus entitas dari backend";
+				set({ syncError: msg });
+			}
+		}
+	}
 }));

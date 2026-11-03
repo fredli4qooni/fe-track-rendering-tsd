@@ -4,6 +4,8 @@
  */
 import type { Track } from "@type/track.types";
 
+import * as entityApi from "@utils/entityApi";
+
 import { trackStore } from "./track.store";
 
 const mockTrack: Track = {
@@ -21,7 +23,14 @@ const mockTrack: Track = {
 
 describe("trackStore vanilla store", () => {
 	beforeEach(() => {
-		trackStore.setState({ tracks: [], selectedTrack: undefined });
+		trackStore.setState({
+			tracks: [],
+			selectedTrack: undefined,
+			isBackendOnline: false,
+			isSyncing: false,
+			syncError: null
+		});
+		jest.clearAllMocks();
 	});
 
 	it("operates without React environment and manages state directly", () => {
@@ -34,5 +43,102 @@ describe("trackStore vanilla store", () => {
 
 		trackStore.getState().removeTrack(88);
 		expect(trackStore.getState().tracks).toHaveLength(0);
+	});
+
+	describe("backend sync operations", () => {
+		it("syncHealthCheck sets isBackendOnline true when UP", async () => {
+			jest.spyOn(entityApi, "checkBackendHealth").mockResolvedValue({
+				online: true,
+				totalEntities: 5
+			});
+
+			const isOnline = await trackStore.getState().syncHealthCheck();
+			expect(isOnline).toBe(true);
+			expect(trackStore.getState().isBackendOnline).toBe(true);
+		});
+
+		it("loadFromBackend populates tracks from backend API", async () => {
+			jest
+				.spyOn(entityApi, "fetchEntitiesFromBackend")
+				.mockResolvedValue([mockTrack]);
+
+			await trackStore.getState().loadFromBackend();
+			expect(trackStore.getState().tracks).toHaveLength(1);
+			expect(trackStore.getState().isBackendOnline).toBe(true);
+			expect(trackStore.getState().isSyncing).toBe(false);
+		});
+
+		it("loadFromBackend sets syncError when backend fails", async () => {
+			jest
+				.spyOn(entityApi, "fetchEntitiesFromBackend")
+				.mockRejectedValue(new Error("Network Error"));
+
+			await trackStore.getState().loadFromBackend();
+			expect(trackStore.getState().isBackendOnline).toBe(false);
+			expect(trackStore.getState().syncError).toBe("Network Error");
+		});
+
+		it("saveNewTrackToBackend uses API when online", async () => {
+			trackStore.setState({ isBackendOnline: true });
+			jest.spyOn(entityApi, "createEntityInBackend").mockResolvedValue({
+				...mockTrack,
+				id: 99
+			});
+
+			const created = await trackStore.getState().saveNewTrackToBackend({
+				name: "New Vessel",
+				lat: -5,
+				lon: 106,
+				course: 0,
+				speed: 10,
+				type: 0,
+				status: "ACTIVE"
+			});
+
+			expect(created.id).toBe(99);
+			expect(trackStore.getState().tracks).toHaveLength(1);
+		});
+
+		it("saveNewTrackToBackend falls back to local ID when offline", async () => {
+			trackStore.setState({ isBackendOnline: false, tracks: [] });
+
+			const created = await trackStore.getState().saveNewTrackToBackend({
+				name: "Offline Vessel",
+				lat: -5,
+				lon: 106,
+				course: 0,
+				speed: 10,
+				type: 0,
+				status: "ACTIVE"
+			});
+
+			expect(created.id).toBe(1);
+			expect(trackStore.getState().tracks[0].name).toBe("Offline Vessel");
+		});
+
+		it("saveTrackUpdateToBackend calls API when online", async () => {
+			trackStore.setState({ isBackendOnline: true, tracks: [mockTrack] });
+			const updateSpy = jest
+				.spyOn(entityApi, "updateEntityInBackend")
+				.mockResolvedValue({
+					...mockTrack,
+					speed: 35
+				});
+
+			await trackStore.getState().saveTrackUpdateToBackend(88, { speed: 35 });
+			expect(trackStore.getState().tracks[0].speed).toBe(35);
+			expect(updateSpy).toHaveBeenCalledWith(88, { speed: 35 });
+		});
+
+		it("deleteTrackFromBackend calls API when online", async () => {
+			trackStore.setState({ isBackendOnline: true, tracks: [mockTrack] });
+			const deleteSpy = jest
+				.spyOn(entityApi, "deleteEntityInBackend")
+				.mockResolvedValue(true);
+
+			await trackStore.getState().deleteTrackFromBackend(88);
+			expect(trackStore.getState().tracks).toHaveLength(0);
+			expect(deleteSpy).toHaveBeenCalledWith(88);
+		});
 	});
 });
