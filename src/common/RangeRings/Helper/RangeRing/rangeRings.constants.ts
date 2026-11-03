@@ -73,7 +73,7 @@ export const SCALE_CONFIG = {
 	INITIAL_RESOLUTION: 156543.0339,
 	MIN_ZOOM: 1,
 	MAX_ZOOM: 14,
-	DEFAULT_ZOOM: 4
+	DEFAULT_ZOOM: 10
 };
 
 export type RangeRingConfig = typeof RANGE_RING_CONFIG;

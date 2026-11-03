@@ -108,8 +108,12 @@ export function generateSingleTrack(
 	const course = Math.floor(Math.random() * 360);
 	const speed = Math.floor(12 + Math.random() * 20);
 
-	const offsetLon = (Math.random() - 0.5) * 1.5;
-	const offsetLat = (Math.random() - 0.5) * 1.5;
+	// Spawns within 6 to 24 Nautical Miles around own ship (clearly visible in 48 NM viewport)
+	const angle = Math.random() * Math.PI * 2;
+	const distanceNM = 6 + Math.random() * 18;
+	const latCos = Math.cos((centerLat * Math.PI) / 180) || 1;
+	const offsetLat = (Math.sin(angle) * distanceNM) / 60;
+	const offsetLon = (Math.cos(angle) * distanceNM) / (60 * latCos);
 
 	return {
 		id,

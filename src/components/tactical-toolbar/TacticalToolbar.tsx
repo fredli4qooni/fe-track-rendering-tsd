@@ -7,7 +7,8 @@ import {
 	AiOutlineClear,
 	AiOutlineDatabase,
 	AiOutlinePlus,
-	AiOutlineReload
+	AiOutlineReload,
+	AiOutlineThunderbolt
 } from "react-icons/ai";
 import { RiRadarLine } from "react-icons/ri";
 
@@ -169,7 +170,7 @@ export const TacticalToolbar: React.FC = () => {
 					onClick={handleLoadBackend}
 					disabled={isSyncing}
 					className="flex items-center gap-1 px-2.5 py-1 bg-neutral-4/60 hover:bg-neutral-4/90 disabled:opacity-50 text-neutral-1 font-medium rounded transition-colors"
-					title="Ambil dan sinkronisasikan entity dari database backend Go"
+					title="Ambil dan sinkronisasikan entity resmi dari database backend Go (SQLite)"
 				>
 					<AiOutlineDatabase
 						className={isSyncing ? "animate-spin" : ""}
@@ -178,9 +179,40 @@ export const TacticalToolbar: React.FC = () => {
 					<span>{isSyncing ? "Loading DB..." : "Load DB"}</span>
 				</button>
 
-				{/* Spawner Selector */}
-				<div className="flex items-center gap-1.5 pl-1 border-l border-neutral-4/70">
-					<span className="text-neutral-3">Spawn:</span>
+				{/* Operational Quick Action Buttons (Database Synced) */}
+				<div className="flex items-center gap-1 pl-2 border-l border-neutral-4/70">
+					<button
+						type="button"
+						onClick={handleQuickAdd}
+						className="flex items-center gap-1 px-2 py-1 bg-primary-20 hover:bg-primary-20/80 text-white rounded transition-colors"
+						title="Tambah 1 entity baru di dekat kapal sendiri (tersimpan ke database)"
+					>
+						<AiOutlinePlus size={13} />
+						<span>+1 Track</span>
+					</button>
+
+					<button
+						type="button"
+						onClick={handleClearAll}
+						disabled={tracks.length === 0}
+						className="flex items-center gap-1 px-2 py-1 bg-red-900/60 hover:bg-red-800 disabled:opacity-30 text-red-200 rounded transition-colors"
+						title="Bersihkan semua entity dari tampilan peta"
+					>
+						<AiOutlineClear size={13} />
+						<span>Clear</span>
+					</button>
+				</div>
+
+				{/* WebGL Hardware Benchmark / Stress-Test Section (In-Memory GPU Simulation Only) */}
+				<div
+					className="flex items-center gap-1.5 pl-2.5 ml-1 border-l-2 border-amber-500/40 bg-amber-950/20 px-2 py-0.5 rounded border border-amber-500/20"
+					title="Mode Benchmark Hardware WebGL: Uji beban rendering ribuan entitas di GPU lokal (in-memory simulation, tidak disimpan ke database)"
+				>
+					<div className="flex items-center gap-1 text-amber-300 font-semibold text-[11px] whitespace-nowrap">
+						<AiOutlineThunderbolt size={13} className="text-amber-400" />
+						<span>⚡ Benchmark:</span>
+					</div>
+
 					{!isCustomMode ? (
 						<select
 							value={selectedPreset}
@@ -191,7 +223,7 @@ export const TacticalToolbar: React.FC = () => {
 									setSelectedPreset(Number(e.target.value));
 								}
 							}}
-							className="bg-black/60 border border-neutral-4 text-white text-xs px-2 py-1 rounded focus:outline-none focus:border-cyan-400 cursor-pointer"
+							className="bg-black/60 border border-neutral-4 text-white text-xs px-2 py-1 rounded focus:outline-none focus:border-amber-400 cursor-pointer"
 						>
 							{SPAWN_PRESETS.map((cnt) => (
 								<option key={cnt} value={cnt}>
@@ -210,7 +242,7 @@ export const TacticalToolbar: React.FC = () => {
 									setCustomCount(e.target.value);
 									setError(null);
 								}}
-								className="w-24 bg-black/60 border border-neutral-4 text-white text-xs px-2 py-1 rounded focus:outline-none focus:border-cyan-400"
+								className="w-24 bg-black/60 border border-neutral-4 text-white text-xs px-2 py-1 rounded focus:outline-none focus:border-amber-400"
 								min={50}
 								max={10000}
 							/>
@@ -229,38 +261,14 @@ export const TacticalToolbar: React.FC = () => {
 						type="button"
 						onClick={handleSpawn}
 						disabled={isSpawning}
-						className="flex items-center gap-1 px-2.5 py-1 bg-cyan-700 hover:bg-cyan-600 disabled:opacity-50 text-white font-medium rounded transition-colors shadow-sm"
-						title="Spawn tracks secara massal"
+						className="flex items-center gap-1 px-2.5 py-1 bg-amber-700/80 hover:bg-amber-600 disabled:opacity-50 text-white font-medium rounded transition-colors shadow-sm"
+						title="Spawn tracks secara lokal untuk benchmark rendering WebGL di GPU"
 					>
 						<AiOutlineReload
 							className={isSpawning ? "animate-spin" : ""}
 							size={13}
 						/>
 						<span>{isSpawning ? "Spawning..." : "Generate"}</span>
-					</button>
-				</div>
-
-				{/* Quick Action Buttons */}
-				<div className="flex items-center gap-1 pl-2 border-l border-neutral-4/70">
-					<button
-						type="button"
-						onClick={handleQuickAdd}
-						className="flex items-center gap-1 px-2 py-1 bg-primary-20 hover:bg-primary-20/80 text-white rounded transition-colors"
-						title="Tambah 1 entity baru di dekat kapal sendiri (tersimpan ke database)"
-					>
-						<AiOutlinePlus size={13} />
-						<span>+1 Track</span>
-					</button>
-
-					<button
-						type="button"
-						onClick={handleClearAll}
-						disabled={tracks.length === 0}
-						className="flex items-center gap-1 px-2 py-1 bg-red-900/60 hover:bg-red-800 disabled:opacity-30 text-red-200 rounded transition-colors"
-						title="Bersihkan semua entity dari peta"
-					>
-						<AiOutlineClear size={13} />
-						<span>Clear</span>
 					</button>
 				</div>
 			</div>

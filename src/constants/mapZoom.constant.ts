@@ -35,8 +35,8 @@ export const SCALE_CONFIG = {
 	MIN_ZOOM: 1,
 	/** Maximum discrete zoom level (most zoomed out) */
 	MAX_ZOOM: 14,
-	/** Default zoom level on map initialization */
-	DEFAULT_ZOOM: 4
+	/** Default zoom level on map initialization (Zoom 10 = 48 NM tactical viewport) */
+	DEFAULT_ZOOM: 10
 };
 
 export const MIN_ZOOM = SCALE_CONFIG.MIN_ZOOM;
@@ -49,7 +49,7 @@ export const MAX_ZOOM = SCALE_CONFIG.MAX_ZOOM;
  */
 export const getScaleFromZoom = (zoom: number): number => {
 	const entry = SCALE_MAPPING.find((m) => m.zoom === zoom);
-	return entry?.scaleNM ?? SCALE_MAPPING[3].scaleNM; // Default to zoom 4 (2 NM)
+	return entry?.scaleNM ?? SCALE_MAPPING[9].scaleNM; // Default to zoom 10 (48 NM)
 };
 
 /**
