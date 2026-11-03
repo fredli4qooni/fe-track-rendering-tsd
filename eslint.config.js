@@ -24,6 +24,7 @@ const defineConfigResult = defineConfig([
 			"src/utils/api",
 			"coverage",
 			"jest.setup.js",
+			"jest.fileMock.js",
 			"**/*.test.{js,ts,tsx}",
 			"src-tauri"
 		]
