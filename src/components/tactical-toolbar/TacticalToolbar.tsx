@@ -97,7 +97,7 @@ export const TacticalToolbar: React.FC = () => {
 	};
 
 	/**
-	 * Load tactical entities persisted in the Go SQLite backend.
+	 * Load tactical entities persisted in the Go PostgreSQL + PostGIS backend.
 	 */
 	const handleLoadBackend = () => {
 		setError(null);
@@ -155,7 +155,7 @@ export const TacticalToolbar: React.FC = () => {
 					}`}
 					title={
 						isBackendOnline
-							? "Connected to Go Backend REST API (SQLite)"
+							? "Connected to Go Backend REST API (PostgreSQL + PostGIS)"
 							: "Backend offline — running local in-memory simulation"
 					}
 				>
@@ -173,7 +173,7 @@ export const TacticalToolbar: React.FC = () => {
 					onClick={handleLoadBackend}
 					disabled={isSyncing}
 					className="flex items-center gap-1 px-2.5 py-1 bg-neutral-4/60 hover:bg-neutral-4/90 disabled:opacity-50 text-neutral-1 font-medium rounded transition-colors"
-					title="Fetch and synchronize entities from Go backend database (SQLite)"
+					title="Fetch and synchronize entities from Go backend database (PostgreSQL + PostGIS)"
 				>
 					<AiOutlineDatabase
 						className={isSyncing ? "animate-spin" : ""}
@@ -191,7 +191,7 @@ export const TacticalToolbar: React.FC = () => {
 						className="flex items-center gap-1 px-2 py-1 bg-primary-20 hover:bg-primary-20/80 disabled:opacity-40 disabled:cursor-not-allowed text-white rounded transition-colors"
 						title={
 							isBackendOnline
-								? "Add 1 new tactical entity near own ship (persisted to SQLite database)"
+								? "Add 1 new tactical entity near own ship (persisted to PostgreSQL + PostGIS database)"
 								: "Backend Offline — Start backend service (go run ./cmd/server/main.go) to add entities"
 						}
 					>
@@ -204,7 +204,7 @@ export const TacticalToolbar: React.FC = () => {
 						onClick={handleClearAll}
 						disabled={tracks.length === 0}
 						className="flex items-center gap-1 px-2 py-1 bg-red-900/60 hover:bg-red-800 disabled:opacity-30 text-red-200 rounded transition-colors"
-						title="Clear all entities from map view"
+						title="Clear all entities from current map view (retains database records)"
 					>
 						<AiOutlineClear size={13} />
 						<span>Clear</span>
@@ -263,8 +263,8 @@ export const TacticalToolbar: React.FC = () => {
 						<p className="mt-1.5 text-[10px] text-amber-400/90 bg-black/40 p-1.5 rounded border border-amber-500/20">
 							<strong>Notice (In-Memory Simulation Only):</strong> All benchmark
 							entities are generated purely in local GPU memory and are NOT
-							persisted to the SQLite backend database, preserving operational
-							data integrity.
+							persisted to the PostgreSQL + PostGIS backend database, preserving
+							operational data integrity.
 						</p>
 					</div>
 

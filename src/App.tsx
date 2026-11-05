@@ -13,8 +13,8 @@ import TrackMap from "@component/TrackMap";
 
 /**
  * Main tactical application root component.
- * Automatically synchronizes with the Go backend database if online on startup,
- * or defaults to a clean standalone state if the backend is offline.
+ * Performs backend health check on startup and initializes with a clean tactical map view.
+ * Database contacts can be synchronized on demand via the "Load DB" action.
  * @returns JSX.Element
  */
 function App() {
@@ -22,13 +22,15 @@ function App() {
 	useOwnShipMover();
 
 	useEffect(() => {
-		const initData = async () => {
-			const isOnline = await useTrackStore.getState().syncHealthCheck();
-			if (isOnline) {
-				await useTrackStore.getState().loadFromBackend();
-			} else {
-				useTrackStore.getState().setTracks([]);
-			}
+		/**
+		 * Initializes app state on mount by checking backend health and setting a clean map view.
+		 * @returns Promise that resolves once health check completes
+		 */
+		const initData = async (): Promise<void> => {
+			// Perform health check to detect Go PostGIS backend connection status
+			await useTrackStore.getState().syncHealthCheck();
+			// Always start with a clean map view (0 tracks) on initial mount / page refresh
+			useTrackStore.getState().setTracks([]);
 		};
 		void initData();
 	}, []);

@@ -132,7 +132,7 @@ export async function checkBackendHealth(): Promise<{
 }
 
 /**
- * Fetch all tactical entities stored in the SQLite backend database.
+ * Fetch all tactical entities stored in the PostgreSQL + PostGIS backend database.
  * @returns Promise resolving to an array of Track objects
  */
 export async function fetchEntitiesFromBackend(): Promise<Track[]> {
