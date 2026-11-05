@@ -45,3 +45,4 @@ describe("App root component", () => {
 		expect(useTrackStore.getState().tracks).toHaveLength(0);
 	});
 });
+
