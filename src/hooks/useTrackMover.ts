@@ -215,7 +215,8 @@ export const useTrackMover = () => {
 				id: t.id,
 				lon: t.lon,
 				lat: t.lat,
-				course: t.course
+				course: t.course,
+				speed: t.speed
 			}));
 			w.postMessage({ type: "update_tracks", tracks: payload });
 			prevTracksRef.current = tracks;
